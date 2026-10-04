@@ -134,7 +134,7 @@
   }
   function openBackup() {
     var last = origGet.call(localStorage, 'bharat_last_backup');
-    document.getElementById('mt').textContent = 'Backup & Restore';
+    document.getElementById('mt').textContent = 'Settings & Backup';
     document.getElementById('mb').innerHTML =
       '<p style="margin:0 0 12px;color:#697586;font-size:14px">One file with all device, rental, customer and mask-sale data. ' +
       'Last backup: <b>' + (last ? new Date(last).toLocaleString() : 'never') + '</b></p>' +
@@ -143,8 +143,20 @@
       '<button id="bk_exp" style="width:100%;padding:14px;border:0;border-radius:12px;background:#0f968d;color:#fff;font-weight:700;font-size:15px;margin-bottom:10px">Export full backup</button>' +
       '<label style="display:block;text-align:center;padding:14px;border:2px solid #0f968d;border-radius:12px;color:#0f968d;font-weight:700;font-size:15px">Restore from file' +
       '<input id="bk_imp" type="file" accept="application/json,.json" style="display:none"></label>' +
-      '<p style="margin:10px 0 0;color:#697586;font-size:12px">Also accepts older Device Tracker and Rental Tracker backups.</p>';
+      '<p style="margin:10px 0 0;color:#697586;font-size:12px">Also accepts older Device Tracker and Rental Tracker backups.</p>' +
+      '<h3 style="margin:20px 0 8px;font-size:16px">App lock</h3>' +
+      '<p style="margin:0 0 10px;color:#697586;font-size:13px">Protects customer ID proofs and money records. Asks for the PIN when the app opens or after 1 minute away.</p>' +
+      '<button id="sec_pin" style="width:100%;padding:13px;border:0;border-radius:12px;background:#182336;color:#fff;font-weight:700;font-size:15px">' + (window.BharatSecurity && BharatSecurity.hasPin() ? 'Turn off app lock' : 'Set PIN lock') + '</button>' +
+      '<h3 style="margin:20px 0 8px;font-size:16px">Rent alerts</h3>' +
+      '<p id="sec_notes" style="margin:0;color:#697586;font-size:13px">The phone will remind you at 9 AM on each rent due date, and daily while any rent is overdue.</p>';
     document.getElementById('bk_exp').onclick = exportAll;
+    document.getElementById('sec_pin').onclick = async function () {
+      if (!window.BharatSecurity) return;
+      if (BharatSecurity.hasPin()) await BharatSecurity.removePin(); else await BharatSecurity.setPin();
+      openBackup();
+    };
+    var pv = window.BharatSecurity && BharatSecurity.preview();
+    if (pv) document.getElementById('sec_notes').insertAdjacentHTML('beforeend', '<br><b>' + pv.length + ' reminder(s) currently planned.</b>');
     document.getElementById('bk_imp').onchange = function (e) { var f = e.target.files[0]; e.target.value = ''; if (f) importFile(f); };
     document.getElementById('sheet').classList.remove('hidden');
   }
@@ -176,7 +188,7 @@
     } catch (e) {
       alert('Storage could not start (' + (e && e.message || e) + '). Using temporary storage — please export a backup.');
     }
-    loadScripts(['shared.js', 'trackers.js', 'app.js']);
+    loadScripts(['shared.js', 'trackers.js', 'app.js', 'security.js']);
     addBackupButton();
   })();
 })();

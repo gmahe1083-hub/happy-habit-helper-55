@@ -5,5 +5,6 @@
 - [x] Phase 2: exports -> share sheet, Back button, Maps opener, PDF ID proofs, tap-to-call
 - [x] Phase 3: durable storage, migration, unified backup (tap logo)
 - [ ] Phase 3 extra: compress ID-proof photos on capture
-- [ ] Phase 4: app lock, overdue-rent notifications
+- [x] Phase 4: PIN app lock + rent reminders (in Settings & Backup)
+- [ ] Phase 4 extra: fingerprint unlock (optional)
 - [ ] Phase 5: device testing, APK/AAB build, distribution choice (needs your phones/keys)
