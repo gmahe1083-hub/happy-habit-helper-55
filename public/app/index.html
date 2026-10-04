@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0f968d"><title>Bharat Surgicals - Device &amp; Rental Tracker</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<div id="shell"><header class="topbar"><button class="icon-btn" id="back" onclick="Shell.back()">‹</button><div class="brand-title"><h1 id="title">Main Dashboard</h1></div><img class="brand-logo" src="bharat-logo.jpg" alt="Bharat Surgicals"></header><main id="view" class="app"></main></div>
+<iframe id="f_device" class="trk"></iframe><iframe id="f_rental" class="trk"></iframe>
+<div id="sheet" class="modal hidden"><div class="modal-card"><div class="modal-head"><h2 id="mt"></h2><div class="modal-head-actions"><button class="close-btn" onclick="Shell.closeSheet()">×</button></div></div><div id="mb"></div></div></div>
+<script src="native-bridge.js"></script><script src="shared.js"></script><script src="trackers.js"></script><script src="app.js"></script>
+</body></html>
