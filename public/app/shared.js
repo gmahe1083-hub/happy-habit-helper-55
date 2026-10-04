@@ -1,0 +1,56 @@
+(function(){
+const SK='bharat_shared_v1',DK='bharat_surgicals_device_buy_sell_v1',RK='bharat_surgicals_rental_v2';
+const C={};const rd=k=>{const raw=localStorage.getItem(k);if(!raw)return null;if(C[k]&&C[k].raw===raw)return C[k].v;try{const v=JSON.parse(raw);C[k]={raw,v};return v}catch(e){return null}};
+const wr=(k,v)=>{const raw=JSON.stringify(v);localStorage.setItem(k,raw);C[k]={raw,v}};
+const dig=s=>String(s||'').replace(/\D/g,'').slice(-10),nm=s=>String(s||'').trim().toLowerCase();
+const rid=p=>p+Date.now()+Math.random().toString(36).slice(2,6);
+const today=()=>{const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)};
+const D0=()=>({devices:[],sales:[],masks:[],suppliers:[],customers:[]}),R0=()=>({equipment:[],customers:[],rentals:[],payments:[]});
+const dup=(l,c)=>l.find(x=>x.id===c.id)||l.find(x=>nm(x.name)&&nm(x.name)===nm(c.name)&&dig(x.phone)===dig(c.phone));
+function migrate(s){const r=rd(RK)||R0(),d=rd(DK)||D0(),rs=r.rentals||[];
+ (r.customers||[]).forEach(c=>{const a=rs.some(x=>x.customerId===c.id&&x.status==='active'),dn=rs.some(x=>x.customerId===c.id&&x.status==='completed'),ok=dn?c.rentalEnabled===true:c.rentalEnabled!==false;
+  s.customers.push({id:c.id,name:c.name||'',phone:c.phone||'',address:c.address||'',mapLink:c.mapLink||'',notes:c.notes||'',status:a?'assigned':ok?'available':'disabled'})});
+ (d.customers||[]).forEach(c=>{const x=dup(s.customers,c);if(x)x.address=x.address||c.location||'';else s.customers.push({id:c.id,name:c.name||'',phone:c.phone||'',address:c.location||'',mapLink:'',notes:'',status:'available'})})}
+function sh(){let s=rd(SK);if(!s){s={customers:[],links:[],v:1};migrate(s);wr(SK,s)}else if(s.customers.some(c=>c.idProofs)){s.customers.forEach(c=>delete c.idProofs);wr(SK,s)}return s}
+const get=id=>sh().customers.find(c=>c.id===id);
+function setStatus(id,v){const s=sh(),c=s.customers.find(x=>x.id===id);if(c){c.status=v;wr(SK,s)}}
+function sync(list,kind){const s=sh(),m={};list.forEach(c=>{const f={name:c.name||'',phone:c.phone||'',address:(kind==='rental'?c.address:c.location)||''};let x=dup(s.customers,c);
+ if(x){Object.assign(x,f);if(x.id!==c.id)m[c.id]=x.id}else{x={id:c.id,mapLink:'',notes:'',status:'available',...f};s.customers.push(x)}
+ if(kind==='rental'){x.mapLink=c.mapLink||'';x.notes=c.notes||''}});wr(SK,s);return m}
+function reconcile(){const s=sh(),d=rd(DK)||D0(),r=rd(RK)||R0();let dc=!localStorage.getItem(DK),rc=!localStorage.getItem(RK);
+ s.links=s.links.filter(l=>d.devices.some(x=>x.id===l.d)&&r.equipment.some(x=>x.id===l.e));
+ const ld=id=>s.links.some(l=>l.d===id),le=id=>s.links.some(l=>l.e===id);
+ r.equipment.forEach(e=>{if(le(e.id)||!nm(e.serial))return;const m=d.devices.find(x=>!ld(x.id)&&nm(x.serial)===nm(e.serial));if(m){s.links.push({d:m.id,e:e.id});if(m.status==='purchased'||m.status==='lent'){m.status='rental';dc=true}}});
+ r.equipment.forEach(e=>{if(le(e.id))return;const id=rid('D');d.devices.push({id,name:e.name,type:e.type,serial:e.serial||'',purchaseDate:today(),purchasedType:'purchased',supplierId:'',price:0,paymentType:'Cash',status:'rental',fromRental:true});s.links.push({d:id,e:e.id});dc=true});
+ d.devices.forEach(x=>{if(x.status==='rental'&&!ld(x.id)){const id=rid('E');r.equipment.push({id,name:x.name,type:x.type,serial:x.serial||'',notes:'',monthly:0,status:'available'});s.links.push({d:x.id,e:id});rc=true}});
+ s.links.forEach(l=>{const x=d.devices.find(v=>v.id===l.d),e=r.equipment.find(v=>v.id===l.e);if(e.status==='rented')return;const fs=x.status==='purchased'||x.status==='lent',so=x.status==='sold';if(!!e.forSale!==fs||!!e.sold!==so){e.forSale=fs;e.sold=so;rc=true}});
+ if(dc)wr(DK,d);if(rc)wr(RK,r);wr(SK,s)}
+function forSale(eid){const l=sh().links.find(x=>x.e===eid),d=rd(DK);if(!l||!d)return;const x=d.devices.find(v=>v.id===l.d);if(x){x.status=x.purchasedType==='lent'?'lent':'purchased';wr(DK,d)}reconcile()}
+function unlink(eid){const s=sh(),l=s.links.find(x=>x.e===eid);if(!l)return;s.links=s.links.filter(x=>x!==l);wr(SK,s);const d=rd(DK);if(!d)return;const x=d.devices.find(v=>v.id===l.d);if(x){if(x.fromRental)d.devices=d.devices.filter(v=>v!==x);else x.status=x.purchasedType==='lent'?'lent':'purchased';wr(DK,d)}}
+function dropEq(did){const s=sh(),l=s.links.find(x=>x.d===did);if(!l)return;s.links=s.links.filter(x=>x!==l);wr(SK,s);const r=rd(RK);if(r){r.equipment=r.equipment.filter(e=>e.id!==l.e);wr(RK,r)}}
+function eqHist(did){const s=sh(),l=s.links.find(x=>x.d===did),r=rd(RK);return l&&r?r.rentals.filter(x=>x.equipmentId===l.e).map(x=>({customer:(s.customers.find(c=>c.id===x.customerId)||{}).name||'Unknown',start:x.startDate,end:x.checkInDate,status:x.status})):[]}
+function hist(cid){const r=rd(RK)||R0(),d=rd(DK)||D0(),c=get(cid)||{},en=id=>(r.equipment.find(e=>e.id===id)||{}).name||'Device',dn=id=>(d.devices.find(e=>e.id===id)||{}).name||'Device';
+ return {rentals:r.rentals.filter(x=>x.customerId===cid).map(x=>({id:x.id,device:en(x.equipmentId),start:x.startDate,end:x.checkInDate,status:x.status,paid:r.payments.filter(p=>p.rentalId===x.id).reduce((a,p)=>a+Number(p.amount||0),0)})),
+ sales:d.sales.filter(x=>x.customerId===cid||(!x.customerId&&nm(x.customerName)&&nm(x.customerName)===nm(c.name))).map(x=>({id:x.id,device:dn(x.deviceId),date:x.sellDate,net:Number(x.devicePrice||0)+Number(x.maskPrice||0)-Number(x.vendorExpense||0)-Number(x.otherExpense||0)}))}}
+function expenses(){const r=rd(RK)||R0(),d=rd(DK)||D0();return [...d.sales.map(x=>({k:'device',id:x.id,date:x.sellDate,title:(d.devices.find(v=>v.id===x.deviceId)||{}).name||'Device',sub:'Sale · Vendor '+Number(x.vendorExpense||0)+' · Other '+Number(x.otherExpense||0),amt:Number(x.vendorExpense||0)+Number(x.otherExpense||0)})),...r.rentals.map(x=>({k:'rental',id:x.id,date:x.startDate,title:(r.equipment.find(e=>e.id===x.equipmentId)||{}).name||'Device',sub:'Rental · one-time expense',amt:Number(x.oneTimeExpense||0)}))].filter(x=>x.amt>0).sort((a,b)=>String(b.date).localeCompare(String(a.date)))}
+function removeCustomer(id){const s=sh();s.customers=s.customers.filter(c=>c.id!==id);wr(SK,s)}
+
+function custStatus(id){const c=get(id)||{},st=c.status||'available';if(st==='available')return{label:'Idle',cls:'st-idle'};const h=hist(id);
+ if(st==='assigned')return{label:h.rentals.some(x=>x.status==='active')?'Running':'Assigned',cls:'st-running'};
+ const r=h.rentals.length,n=h.sales.length;return{label:'Disabled'+(n&&!r?' (sold)':r&&!n?' (completed)':''),cls:'st-disabled'}}
+const rLabel=(r,R)=>{const e=R.equipment.find(x=>x.id===r.equipmentId)||{},c=sh().customers.find(x=>x.id===r.customerId)||{};return (e.name||'Device')+' — '+(c.name||'Customer')};
+const ms=()=>sh().maskSales||[];
+function maskSaleAdd(x){const s=sh();(s.maskSales=s.maskSales||[]).push(x);wr(SK,s)}
+function maskSaleDel(id){const s=sh(),x=(s.maskSales||[]).find(v=>v.id===id);if(x){s.maskSales=s.maskSales.filter(v=>v!==x);wr(SK,s)}return x}
+function maskSalesOf(mid){const R=rd(RK)||R0();return ms().filter(x=>x.maskId===mid).map(x=>{const r=x.rentalId&&R.rentals.find(v=>v.id===x.rentalId);return {...x,rentalLabel:x.rentalId?(r?rLabel(r,R):'Rental'):''}})}
+function maskSalesForRental(){const R=rd(RK)||R0();return ms().filter(x=>x.rentalId).map(x=>{const r=R.rentals.find(v=>v.id===x.rentalId);return {...x,label:r?rLabel(r,R):'Rental'}}).sort((a,b)=>String(b.date).localeCompare(String(a.date)))}
+function activeRentals(){const R=rd(RK)||R0();return R.rentals.filter(r=>r.status==='active').map(r=>({id:r.id,label:rLabel(r,R),extra:Number(r.oneTimeExtra||0)}))}
+function rentalExtraAdd(rid,d){const R=rd(RK);if(!R)return;const r=R.rentals.find(v=>v.id===rid);if(r){r.oneTimeExtra=Math.max(0,Number(r.oneTimeExtra||0)+d);wr(RK,R)}}
+function maskSalesAll(){const R=rd(RK)||R0();return ms().map(x=>{const r=x.rentalId&&R.rentals.find(v=>v.id===x.rentalId);return {...x,rentalLabel:x.rentalId?(r?rLabel(r,R):'Rental'):''}}).sort((a,b)=>String(b.date).localeCompare(String(a.date)))}
+const maskSaleGet=id=>ms().find(v=>v.id===id);
+function maskSaleUpdate(id,p){const s=sh(),x=(s.maskSales||[]).find(v=>v.id===id);if(x){Object.assign(x,p);wr(SK,s)}return x}
+function rentalInfo(rid){const R=rd(RK)||R0(),r=R.rentals.find(v=>v.id===rid);if(!r)return null;const e=R.equipment.find(v=>v.id===r.equipmentId)||{},c=sh().customers.find(v=>v.id===r.customerId)||{};
+ return {device:e.name||'Device',serial:e.serial||'',customer:c.name||'Customer',phone:c.phone||'',status:r.status,start:r.startDate,end:r.checkInDate,monthly:Number(r.monthly||0),extra:Number(r.oneTimeExtra||0),paid:R.payments.filter(p=>p.rentalId===r.id).reduce((a,p)=>a+Number(p.amount||0),0)}}
+window.Shared={maskSalesAll,maskSaleGet,maskSaleUpdate,rentalInfo,custStatus,maskSaleAdd,maskSaleDel,maskSalesOf,maskSalesForRental,activeRentals,rentalExtraAdd,maskSoldDirect:id=>ms().filter(x=>x.maskId===id).reduce((a,x)=>a+Number(x.qty||0),0),directMaskRevenue:()=>ms().reduce((a,x)=>a+Number(x.price||0),0),customers:()=>sh().customers,get,status:id=>(get(id)||{}).status||'available',setStatus,sync,reconcile,forSale,unlink,dropEq,eqHist,hist,expenses,removeCustomer,hasSales:id=>hist(id).sales.length>0,
+ toRental:(c,p)=>({id:c.id,name:c.name,phone:c.phone,address:c.address,mapLink:c.mapLink,notes:c.notes,idProofs:p||[],rentalEnabled:c.status==='available'}),toDevice:c=>({id:c.id,name:c.name,phone:c.phone,location:c.address})};
+})();
