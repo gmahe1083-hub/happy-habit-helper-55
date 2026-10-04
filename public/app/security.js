@@ -78,13 +78,13 @@
   function buildNotifications(list) {
     var w = rentalWin(), out = [], now = Date.now(), id = 1000;
     var tomorrow9 = new Date(); tomorrow9.setDate(tomorrow9.getDate() + 1); tomorrow9.setHours(9, 0, 0, 0);
-    var overdue = list.filter(function (x) { return x.until < 0 && x.s.due > 0; });
+    var overdue = list.filter(function (x) { return x.s.due > 0; });
     if (overdue.length) {
       var total = overdue.reduce(function (s, x) { return s + x.s.due; }, 0);
-      out.push({ id: id++, title: overdue.length + ' overdue rental' + (overdue.length > 1 ? 's' : ''),
+      out.push({ id: id++, title: overdue.length + ' rental' + (overdue.length > 1 ? 's' : '') + ' with rent pending',
         body: overdue.slice(0, 3).map(function (x) { return custName(w, x.customerId) + ' ' + money(x.s.due); }).join(', ') + ' · total ' + money(total),
         schedule: { at: new Date(now + 5000) } });
-      out.push({ id: id++, title: 'Rent still overdue', body: overdue.length + ' rental(s), ' + money(total) + ' pending. Open the app to record payment.',
+      out.push({ id: id++, title: 'Rent still pending', body: overdue.length + ' rental(s), ' + money(total) + ' pending. Open the app to record payment.',
         schedule: { at: tomorrow9 } });
     }
     list.filter(function (x) { return x.until >= 0; }).forEach(function (x) {
