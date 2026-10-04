@@ -67,12 +67,13 @@
     try { return w && typeof w.alerts === 'function' ? w.alerts() : null; } catch (e) { return null; }
   }
   function at9(dateStr) { var d = new Date(dateStr + 'T09:00:00'); return d; }
+  function rstate() { try { return JSON.parse(localStorage.getItem('bharat_surgicals_rental_v2') || '{}') || {}; } catch (e) { return {}; } }
   function money(n) { return '₹' + Math.round(Number(n) || 0).toLocaleString('en-IN'); }
   function custName(w, id) {
-    try { var c = (w.state.customers || []).find(function (x) { return x.id === id; }); return c ? c.name : 'Customer'; } catch (e) { return 'Customer'; }
+    try { var c = (rstate().customers || []).find(function (x) { return x.id === id; }); return c ? c.name : 'Customer'; } catch (e) { return 'Customer'; }
   }
   function equipName(w, id) {
-    try { var e = (w.state.equipment || []).find(function (x) { return x.id === id; }); return e ? e.name : 'device'; } catch (e) { return 'device'; }
+    try { var e = (rstate().equipment || []).find(function (x) { return x.id === id; }); return e ? e.name : 'device'; } catch (e) { return 'device'; }
   }
   function buildNotifications(list) {
     var w = rentalWin(), out = [], now = Date.now(), id = 1000;
