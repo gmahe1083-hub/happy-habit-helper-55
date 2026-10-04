@@ -15,3 +15,5 @@
 - `public/app/` is Capacitor's `webDir`; the `/` route only iframes it for web preview. Why: one source for web and APK.
 - All Android-native behaviour (exports, back button, maps, PDFs) lives in `public/app/native-bridge.js` and is a no-op in browsers. Why: keeps tracker code untouched.
 - Tracker iframes get the bridge via `parent.NB.install(window)` prepended to the `pre` script in `trackers.js`. Why: iframes have their own window prototypes.
+- Tracker data keys are served from memory and persisted to IndexedDB by `public/app/storage.js`, which patches `Storage.prototype` per window and loads the tracker scripts only after data is loaded. Why: removes the localStorage size limit without touching tracker logic.
+- The unified backup (`format: "unified"`) is the single export; import also accepts old per-tracker files. Why: PRD backup requirement.
