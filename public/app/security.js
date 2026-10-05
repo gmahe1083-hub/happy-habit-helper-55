@@ -19,7 +19,7 @@
     el.id = 'lockscreen';
     el.style.cssText = 'position:fixed;inset:0;z-index:99999;background:linear-gradient(160deg,#0f968d,#087a73);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-family:inherit;padding:24px';
     el.innerHTML =
-      '<img src="bharat-logo.jpg" style="width:84px;height:84px;border-radius:20px;background:#fff;object-fit:contain;margin-bottom:18px">' +
+      '<img src="bharat-logo.png" style="width:84px;height:84px;border-radius:20px;background:#fff;object-fit:contain;margin-bottom:18px">' +
       '<div style="font-size:20px;font-weight:800;margin-bottom:6px">Bharat Surgicals Tracker</div>' +
       '<div id="lk_msg" style="font-size:14px;opacity:.9;margin-bottom:18px">Enter your PIN</div>' +
       '<input id="lk_in" type="password" inputmode="numeric" maxlength="6" autocomplete="off" style="width:200px;text-align:center;font-size:28px;letter-spacing:10px;padding:12px;border:0;border-radius:14px;color:#182336">' +
