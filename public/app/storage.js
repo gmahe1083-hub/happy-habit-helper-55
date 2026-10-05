@@ -166,12 +166,6 @@
     logo.style.cursor = 'pointer';
     logo.title = 'Backup & Restore';
     logo.addEventListener('click', openBackup);
-    var last = origGet.call(localStorage, 'bharat_last_backup');
-    if (!last || Date.now() - new Date(last).getTime() > 7 * 864e5) {
-      var dot = document.createElement('span');
-      dot.style.cssText = 'position:absolute;width:10px;height:10px;border-radius:50%;background:#e34b4b;border:2px solid #fff;margin-left:-12px;margin-top:-2px';
-      logo.insertAdjacentElement('afterend', dot);
-    }
   }
 
   window.BharatStore = { patch: patch, flush: flush, exportAll: exportAll, openBackup: openBackup };
