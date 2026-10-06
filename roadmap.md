@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Merge the uploaded v7 final tracker while preserving Settings & Backup, logo, storage, security, and native features
+- [x] Merge the uploaded v7 final tracker while preserving Settings & Backup, logo, storage, security, and native features
 - [x] Setup: Capacitor config + packages (Android Studio & signing keys done on your PC)
 - [x] Phase 1: existing app wrapped, runs in preview
 - [x] Phase 2: exports -> share sheet, Back button, Maps opener, PDF ID proofs, tap-to-call
