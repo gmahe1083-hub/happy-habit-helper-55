@@ -13,12 +13,15 @@ const load=k=>new Promise((res,rej)=>{const f=$('f_'+k),tok='t'+(++tokN)+'_'+Dat
   else if(Date.now()-t0>10000){clearInterval(iv);rej(new Error(k+' tracker did not start'+(w&&w.__err?' ('+w.__err+')':'')))}},25)});
 const showErr=e=>{$('shell').style.display='block';document.querySelectorAll('.trk').forEach(f=>f.classList.remove('on'));$('view').innerHTML='<div class="card"><strong>Could not start</strong><div class="muted" style="margin-top:6px">'+esc(e&&e.message||e)+'</div><div class="actions"><button class="primary-btn" onclick="location.reload()">RELOAD</button></div></div>'};
 const fresh=()=>{S.reconcile();return Promise.all([load('device'),load('rental')])};
-function render(){$('shell').style.display='block';document.querySelectorAll('.trk').forEach(f=>f.classList.remove('on'));$('title').textContent=T[cur.p];$('back').style.visibility=cur.p==='main'?'hidden':'visible';({main:vMain,customers:vCust,customer:vCustD,reports:vRep,expenses:vExp})[cur.p]()}
-function go(p,arg){ens();stack.push(cur);cur={p,arg};render()}
-async function openIn(k,code,page){ens();stack.push(cur);$('shell').style.display='none';try{await fresh()}catch(e){stack.pop();showErr(e);return}const f=$('f_'+k),w=f.contentWindow;w.__fromMain=true;w.__modalMain=!page;try{if(code)w.eval(code)}catch(e){console.error(e)}cur={p:'t',k};f.classList.add('on')}
+const freshOne=k=>{S.reconcile();return load(k)};
+let dir=1;
+function render(){window.scrollTo(0,0);const vw=$('view');vw.classList.remove('pf','pb');void vw.offsetWidth;vw.classList.add(dir>0?'pf':'pb');$('shell').style.display='block';document.querySelectorAll('.trk').forEach(f=>f.classList.remove('on'));$('title').textContent=T[cur.p];$('back').style.visibility=cur.p==='main'?'hidden':'visible';({main:vMain,customers:vCust,customer:vCustD,reports:vRep,expenses:vExp,custlist:vCustL,expl:vExpL})[cur.p]()}
+function go(p,arg){dir=1;ens();stack.push(cur);cur={p,arg};render()}
+let busy=false;
+async function openIn(k,code,page){if(busy)return;busy=true;ens();stack.push(cur);document.body.classList.add('loading');try{await freshOne(k)}catch(e){stack.pop();document.body.classList.remove('loading');busy=false;showErr(e);return}const f=$('f_'+k),w=f.contentWindow;w.__fromMain=true;w.__modalMain=!page;try{if(code)w.eval(code)}catch(e){console.error(e)}cur={p:'t',k};document.querySelectorAll('.trk').forEach(x=>x.classList.remove('on'));f.classList.add('on');document.body.classList.remove('loading');busy=false;setTimeout(()=>{if(cur.p==='t')$('shell').style.display='none'},320)}
 function back(){if(!$('sheet').classList.contains('hidden')){closeSheet();return true}
  if(cur.p==='t'){const w=$('f_'+cur.k).contentWindow;if(w.__shellBack&&w.__shellBack())return true}
- if(stack.length){cur=stack.pop();render();if(cur.reopen){const k=cur.reopen;cur.reopen=null;if(k==='expenses')setTimeout(exp,0)}return true}return false}
+ if(stack.length){dir=-1;cur=stack.pop();render();if(cur.reopen){const k=cur.reopen;cur.reopen=null;if(k==='expenses')setTimeout(exp,0)}return true}return false}
 function main(){stack=[];cur={p:'main'};render()}
 function ens(){if(history.state&&history.state.s===0)history.pushState({s:1},'')}
 function addMenu(){$('mt').textContent='Add';$('mb').innerHTML=[['device','📦 ADD DEVICE'],['mask','😷 ADD MASK'],['supplier','🏢 ADD SUPPLIER'],['customer','👥 ADD CUSTOMER']].map(([a,b])=>`<button class="${a==='device'?'primary-btn':'secondary-btn'}" style="width:100%;margin-bottom:10px" onclick="Shell.add('${a}')">${b}</button>`).join('');$('sheet').classList.remove('hidden')}
@@ -66,4 +69,31 @@ window.Shell={exp,expOpen,back,main,ens,go,addMenu,closeSheet,add,rep,dev:(c,p)=
  edit:id=>openIn('rental',`openCustomerEdit('${id}')`),enable:id=>{S.setStatus(id,'available');render()}};
 history.replaceState({s:0},'');history.pushState({s:1},'');
 addEventListener('popstate',()=>{if(back())history.pushState({s:1},'')});
+/* ===== v5 hubs (shell) ===== */
+T.custlist='Customers';T.expl='Expenses';
+const hIco=e=>'<span class="hub-ico">'+e+'</span>';
+const hBtn=(c,ico,t,s,fn,n)=>'<button class="sold-btn '+c+'" type="button" onclick="'+fn+'">'+ico+'<span class="sb-tx"><b>'+t+'</b><small>'+s+'</small></span><strong>'+n+'</strong><span class="sb-go">›</span></button>';
+const hSum=a=>'<div class="card section-tint"><div class="sum4">'+a.map(x=>'<div><b>'+x[1]+'</b><span>'+x[0]+'</span></div>').join('')+'</div></div>';
+const ccat=c=>{const st=c.status||'available';if(st==='available')return'idle';if(st==='assigned')return'run';const h=S.hist(c.id);return h.sales.length&&!h.rentals.length?'sold':'done'};
+const CATS=[['idle','Idle','🙂','sb-av','Available · ready for a rental or sale'],['run','Running','🔑','sb-run','Has a rental running now'],['sold','Sold','🏷️','sb-sd','Bought a device'],['done','Completed','✅','sb-done','Rental completed']];
+const cgroups=()=>{const g={idle:[],run:[],sold:[],done:[]};S.customers().slice().reverse().forEach(c=>g[ccat(c)].push(c));return g};
+const ccard=c=>{const h=S.hist(c.id),b=S.custStatus(c.id);return `<div class="card" data-search="${esc((c.name+' '+c.phone).toLowerCase())}" onclick="Shell.go('customer','${c.id}')"><div class="row"><strong>${esc(c.name||'Unnamed')}</strong><span class="muted">${esc(c.phone||'')}</span></div><div class="small muted">${esc(c.address||'No address')}</div><div class="row small" style="margin-top:7px"><span>${h.rentals.length} rental(s) · ${h.sales.length} sale(s)</span><span class="badge ${b.cls}">Status - ${b.label}</span></div></div>`};
+function vCust(){const g=cgroups(),n=S.customers().length;
+ $('view').innerHTML=`<div class="row"><h2 class="section-title" style="margin:0">Customers</h2><button class="small-icon-btn" onclick="Shell.add('customer')">＋</button></div>`
+ +hSum([['Total',n]].concat(CATS.map(c=>[c[1],g[c[0]].length])))
+ +CATS.map(c=>hBtn(c[3],hIco(c[2]),c[1]+' Customers',c[4],`Shell.go('custlist','${c[0]}')`,g[c[0]].length)).join('')
+ +`<input class="list-search" placeholder="Search customers" oninput="Shell.filt(this.value)"><div id="cl">`
+ +CATS.map(c=>`<h3 class="grp-h g-${c[0]}"><span>${c[2]} ${c[1]}</span><b>${g[c[0]].length}</b></h3>`+(g[c[0]].map(ccard).join('')||'<div class="empty">None</div>')).join('')+`</div>`}
+function vCustL(){const k=cur.arg,c=CATS.find(x=>x[0]===k)||CATS[0],l=cgroups()[c[0]];
+ $('view').innerHTML=`<div class="row"><h2 class="section-title" style="margin:0">${c[2]} ${c[1]} Customers</h2><button class="small-icon-btn" onclick="Shell.add('customer')">＋</button></div><div class="card section-tint"><div class="row"><strong>${c[1].toUpperCase()}</strong><strong>${l.length}</strong></div><div class="tx-line">${c[4]} · newest first.</div></div><input class="list-search" placeholder="Search customers" oninput="Shell.filt(this.value)"><div id="cl">${l.map(ccard).join('')||'<div class="empty">No customers here.</div>'}</div>`}
+function exp(){closeSheet();go('expenses')}
+const xcard=x=>`<div class="card stc-${x.k==='device'?'sold':'rental'}" onclick="Shell.${x.k==='device'?'dev':'ren2'}('${x.k==='device'?'openSale':'openRental'}(\\'${x.id}\\')')"><div class="row"><div><strong>${fmt(x.date)}</strong><div class="device-title">${esc(x.title)}</div><div class="muted">${esc(x.sub)}</div></div><strong>${money(x.amt)}</strong></div></div>`;
+function vExp(){const r=S.expenses(),dv=r.filter(x=>x.k==='device'),rn=r.filter(x=>x.k!=='device'),sm=l=>l.reduce((a,x)=>a+x.amt,0);
+ $('view').innerHTML=`<div class="card section-tint"><div class="row"><strong>TOTAL EXPENSES</strong><strong>${money(sm(r))}</strong></div><div class="tx-line">Device sale expenses + rental expenses.</div></div>`
+ +hBtn('sb-sd',hIco('💰'),'Device Sale Expenses',dv.length+' entr'+(dv.length==1?'y':'ies')+' · vendor + other',`Shell.go('expl','device')`,money(sm(dv)))
+ +hBtn('sb-rn',hIco('🔑'),'Rental Expenses',rn.length+' entr'+(rn.length==1?'y':'ies')+' · one-time expense',`Shell.go('expl','rental')`,money(sm(rn)))
+ +`<h2 class="section-title" style="margin:18px 2px 0">All expenses</h2>`+(r.map(xcard).join('')||'<div class="empty">No expenses yet.</div>')}
+function vExpL(){const dv=cur.arg==='device',r=S.expenses().filter(x=>dv?x.k==='device':x.k!=='device'),t=r.reduce((a,x)=>a+x.amt,0);
+ $('view').innerHTML=`<div class="card section-tint"><div class="row"><strong>${dv?'DEVICE SALE EXPENSES':'RENTAL EXPENSES'}</strong><strong>${money(t)}</strong></div><div class="tx-line">${r.length} entr${r.length==1?'y':'ies'} · latest first. Tap one to see the full entry.</div></div>${r.map(xcard).join('')||'<div class="empty">No expenses here.</div>'}<div class="total-bar"><span>TOTAL</span><span>${money(t)}</span></div>`}
+
 render();
