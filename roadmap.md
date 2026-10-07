@@ -1,5 +1,6 @@
 # Roadmap
 
+- [x] Merge uploaded v9 update, preserve Settings & Backup, and fit the full supplied logo in all app icons
 - [x] Merge the uploaded v7 final tracker while preserving Settings & Backup, logo, storage, security, and native features
 - [x] Setup: Capacitor config + packages (Android Studio & signing keys done on your PC)
 - [x] Phase 1: existing app wrapped, runs in preview

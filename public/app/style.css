@@ -200,7 +200,7 @@ button:active,.tile:active,.stat:active,.card:active{transform:scale(.97)}
 .mini-line:active{background:#eef6ff}
 @media(max-width:520px){.dashboard-main .stat,.dashboard-grid .stat{min-height:112px!important;padding:12px 8px!important}.stat::before{width:34px;height:34px;font-size:18px;margin-bottom:6px}}
 .dashboard-main .stat:nth-child(1){background:var(--g1)!important;--ico:"📦"}
-.dashboard-main .stat:nth-child(2){background:var(--g3)!important;--ico:"🔑"}
+.dashboard-main .stat:nth-child(2){background:var(--g3)!important;--ico:"🔄"}
 .dashboard-main .stat:nth-child(3){background:var(--g2)!important;--ico:"🛒"}
 .dashboard-main .stat:nth-child(4){background:var(--g6)!important;--ico:"💰"}
 .dashboard-main .stat:nth-child(5){background:var(--g5)!important;--ico:"💎"}
@@ -291,3 +291,41 @@ body.loading::before{content:"";position:fixed;top:0;left:0;height:3px;width:100
 .card,.tile,.type-card,.stat,button{-webkit-tap-highlight-color:transparent}
 .card[onclick]:active,.tile:active,.stat:active,.type-card:active{transform:scale(.985);transition:transform .08s}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* ===== v9 colour-coded buttons ===== */
+.bt-del{background:linear-gradient(135deg,#f43f5e,#be123c)!important;color:#fff!important}
+.bt-edit{background:linear-gradient(135deg,#fbbf24,#d97706)!important;color:#fff!important}
+.bt-sell{background:linear-gradient(135deg,#34d399,#15803d)!important;color:#fff!important}
+.bt-rent{background:linear-gradient(135deg,#60a5fa,#1d4ed8)!important;color:#fff!important}
+.bt-in{background:linear-gradient(135deg,#c084fc,#7e22ce)!important;color:#fff!important}
+.bt-pay{background:linear-gradient(135deg,#22d3ee,#0e7490)!important;color:#fff!important}
+.bt-view{background:#e0f2fe!important;color:#0369a1!important}
+.bt-add{background:linear-gradient(135deg,#2dd4bf,#0f766e)!important;color:#fff!important}
+button[class*=bt-]:active{transform:scale(.96)}
+.badge.b-nw{background:#ffedd5;color:#c2410c}.badge.b-done{background:#e0e7ff;color:#4338ca}
+.badge.b-lent{background:#fef9c3;color:#a16207}
+/* ===== v9 dynamic icons ===== */
+@keyframes v9fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes v9pu{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+@keyframes v9sp{to{transform:rotate(360deg)}}
+@keyframes v9wb{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+@keyframes v9ecg{from{stroke-dashoffset:44}to{stroke-dashoffset:-44}}
+@keyframes v9ring{0%{box-shadow:0 0 0 0 rgba(239,68,68,.55)}100%{box-shadow:0 0 0 9px rgba(239,68,68,0)}}
+.stat::before{animation:v9fl 3.2s ease-in-out infinite}
+.stat:nth-child(2n)::before{animation-delay:.5s}.stat:nth-child(3n)::before{animation-delay:1s}
+.qi{display:block;animation:v9fl 2.6s ease-in-out infinite}
+.quick button:nth-child(2) .qi{animation-delay:.35s}.quick button:nth-child(3) .qi{animation-delay:.7s}
+.qi .tki{display:block;margin:0 auto;filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))}
+.tki .ecg{stroke-dashoffset:44;animation:v9ecg 2.2s linear infinite}
+.tki .spin{transform-origin:24px 24px;animation:v9sp 5s linear infinite}
+.tki .dot{animation:v9pu 1.6s ease-in-out infinite;transform-origin:24px 24px}
+.dev-ico svg,.hub-ico{animation:v9pu 3.4s ease-in-out infinite}
+.tile .emoji{animation:v9wb 4s ease-in-out infinite}
+.tile:nth-child(2n) .emoji{animation-delay:.8s}
+.badge.due,.badge.overdue{animation:v9ring 1.7s ease-out infinite}
+.sec-badge{animation:v9pu 1.8s ease-in-out infinite}
+.card[onclick]{transition:transform .14s ease,box-shadow .14s ease}.card[onclick]:active{transform:scale(.985)}
+@media(prefers-reduced-motion:reduce){.stat::before,.qi,.tki .ecg,.tki .spin,.tki .dot,.dev-ico svg,.hub-ico,.tile .emoji,.badge.due,.badge.overdue,.sec-badge{animation:none!important}}
+
+/* Full logo, including lettering; prevent flex shrink and rounded-corner clipping. */
+.brand-logo{width:48px;height:48px;flex:0 0 48px;object-fit:contain;object-position:center;padding:2px;border-radius:8px;background:var(--card)}
