@@ -18,3 +18,4 @@
 - Tracker data keys are served from memory and persisted to IndexedDB by `public/app/storage.js`, which patches `Storage.prototype` per window and loads the tracker scripts only after data is loaded. Why: removes the localStorage size limit without touching tracker logic.
 - The unified backup (`format: "unified"`) is the single export; import also accepts old per-tracker files. Why: PRD backup requirement.
 - App lock and rent reminders live in `public/app/security.js`, loaded after the trackers; reminders reuse the rental tracker's own `alerts()` function. Why: no duplicated billing logic.
+- Logo and icon images are source-controlled under `public/` and `public/app/`, with contained header sizing and padded home-screen variants. Why: Capacitor must package the logo offline and launcher masks must not crop it.
