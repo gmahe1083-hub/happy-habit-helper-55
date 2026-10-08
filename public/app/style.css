@@ -327,5 +327,16 @@ button[class*=bt-]:active{transform:scale(.96)}
 .card[onclick]{transition:transform .14s ease,box-shadow .14s ease}.card[onclick]:active{transform:scale(.985)}
 @media(prefers-reduced-motion:reduce){.stat::before,.qi,.tki .ecg,.tki .spin,.tki .dot,.dev-ico svg,.hub-ico,.tile .emoji,.badge.due,.badge.overdue,.sec-badge{animation:none!important}}
 
-/* Full logo, including lettering; prevent flex shrink and rounded-corner clipping. */
+/* ===== v10: static icons + status colours ===== */
+.stat::before,.qi,.tki .dot,.tki .spin,.dev-ico svg,.hub-ico,.tile .emoji,.badge.due,.badge.overdue,.sec-badge{animation:none!important}
+.tki .ecg{animation:none!important;stroke-dashoffset:0!important}
+.sum4 .sm{border-top:4px solid #cbd5e1;border-radius:8px;padding-top:6px}
+.sm0{border-color:#0f968d!important}.sm1{border-color:#10b981!important}.sm2{border-color:#3b82f6!important}.sm3{border-color:#f43f5e!important}
+.sm0 b{color:#0f766e}.sm1 b{color:#059669}.sm2 b{color:#2563eb}.sm3 b{color:#e11d48}
+.sm0 span{color:#0f766e}.sm1 span{color:#059669}.sm2 span{color:#2563eb}.sm3 span{color:#e11d48}
+.hub-ico.hi-avail{background:#fff!important;box-shadow:0 4px 10px -4px rgba(5,150,105,.7)}
+.hub-ico.hi-rental{background:#fff!important;box-shadow:0 4px 10px -4px rgba(37,99,235,.7)}
+.hub-ico.hi-sold{background:#fff!important;box-shadow:0 4px 10px -4px rgba(225,29,72,.7)}
+
+/* Preserve the complete logo and lettering in every header. */
 .brand-logo{width:48px;height:48px;flex:0 0 48px;object-fit:contain;object-position:center;padding:2px;border-radius:8px;background:var(--card)}
