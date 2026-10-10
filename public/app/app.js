@@ -56,7 +56,7 @@ function vCustD(){const c=S.get(cur.arg);if(!c){back();return}const h=S.hist(c.i
  <div class="types" style="margin-top:12px"><div class="type-card"><b>${h.rentals.length}</b><div class="tcl">Rentals (${act} active)</div></div><div class="type-card"><b>${money(paid)}</b><div class="tcl">Rent paid</div></div><div class="type-card"><b>${h.sales.length} · ${money(net)}</b><div class="tcl">Device sales</div></div></div>
  <h2 class="section-title">Rental History</h2>${h.rentals.map(x=>`<div class="card stc-${x.status==='active'?'rental':'done'}" onclick="Shell.dev2('openRental(\\'${x.id}\\')')"><div class="row"><strong>${esc(x.device)}</strong><span class="badge ${x.status==='active'?'b-rental':'b-nw'}">${x.status==='active'?'🔄 Active':'Completed'}</span></div><div class="small muted">${fmt(x.start)} – ${x.status==='active'?'Present':fmt(x.end)} · Paid ${money(x.paid)}</div></div>`).join('')||'<div class="empty">No rentals.</div>'}
  <h2 class="section-title">Sale History</h2>${h.sales.map(x=>`<div class="card stc-sold" onclick="Shell.dev('openSale(\\'${x.id}\\')')"><div class="row"><strong>${esc(x.device)}</strong><strong>${money(x.net)}</strong></div><div class="small muted">${fmt(x.date)}</div></div>`).join('')||'<div class="empty">No sales.</div>'}`}
-function vRep(){const L=[['purchased','🛒 Purchased Report','Devices purchased'],['sold','💰 Sold Report','Device sales and mask sales (direct + against rentals)'],['mask','😷 Mask Report','Mask stock, purchases and sales'],['rental','🔄 Rental Report','All rentals, totals and dues'],['extra','✨ Mask / Extra Report','One-time mask / extra on rentals'],['expense','🧾 Expense Report','Sale and rental expenses']];$('view').innerHTML=L.map(x=>`<div class="card" onclick="Shell.rep('${x[0]}')"><strong>${x[1]}</strong><div class="muted">${x[2]}</div></div>`).join('')}
+function vRep(){const _h='<button class="dl-all" onclick="Shell.dlAll()">⬇ DOWNLOAD ALL REPORTS</button><div class="dl-note">One Excel-ready file with every report: purchases, sales, masks, rentals, payments, expenses and customers.</div>';const L=[['purchased','🛒 Purchased Report','Devices purchased'],['sold','💰 Sold Report','Device sales and mask sales (direct + against rentals)'],['mask','😷 Mask Report','Mask stock, purchases and sales'],['rental','🔄 Rental Report','All rentals, totals and dues'],['extra','✨ Mask / Extra Report','One-time mask / extra on rentals'],['expense','🧾 Expense Report','Sale and rental expenses']];$('view').innerHTML=_h+L.map(x=>`<div class="card" onclick="Shell.rep('${x[0]}')"><strong>${x[1]}</strong><div class="muted">${x[2]}</div></div>`).join('')}
 function exp(){const r=S.expenses(),tot=r.reduce((a,x)=>a+x.amt,0),dv=r.filter(x=>x.k==='device').reduce((a,x)=>a+x.amt,0),rn=tot-dv;
  $('mt').textContent='Total Expenses';
  $('mb').innerHTML=(r.map(x=>`<div class="card stc-${x.k==='device'?'sold':'rental'}" onclick="Shell.expOpen('${x.k}','${x.id}')"><div class="row"><div><strong>${fmt(x.date)}</strong><div class="device-title">${esc(x.title)}</div><div class="muted">${esc(x.sub)}</div></div><strong>${money(x.amt)}</strong></div></div>`).join('')||'<div class="empty">No expenses yet.</div>')
@@ -64,7 +64,7 @@ function exp(){const r=S.expenses(),tot=r.reduce((a,x)=>a+x.amt,0),dv=r.filter(x
  $('sheet').classList.remove('hidden')}
 function expOpen(k,id){closeSheet();cur.reopen='expenses';if(k==='device')openIn('device',`openSale('${id}')`);else openIn('rental',`openRental('${id}')`)}
 function vExp(){const r=S.expenses();$('view').innerHTML=r.map(x=>`<div class="card" onclick="Shell.${x.k==='device'?'dev':'ren2'}('${x.k==='device'?'openSale':'openRental'}(\\'${x.id}\\')')"><div class="row"><div><strong>${fmt(x.date)}</strong><div class="device-title">${esc(x.title)}</div><div class="muted">${esc(x.sub)}</div></div><strong>${money(x.amt)}</strong></div></div>`).join('')||'<div class="empty">No expenses.</div>';$('view').insertAdjacentHTML('beforeend',`<div class="total-bar"><span>TOTAL EXPENSES</span><span>${money(r.reduce((a,x)=>a+x.amt,0))}</span></div>`)}
-window.Shell={exp,expSub,sheetBack,expOpen,back,main,ens,go,addMenu,closeSheet,add,rep,dev:(c,p)=>openIn('device',c,p),ren:(c,p)=>openIn('rental',c,p),dev2:c=>openIn('rental',c),ren2:c=>openIn('rental',c),tracker:k=>openIn(k,'',1),
+window.Shell={dlAll,exp,expSub,sheetBack,expOpen,back,main,ens,go,addMenu,closeSheet,add,rep,dev:(c,p)=>openIn('device',c,p),ren:(c,p)=>openIn('rental',c,p),dev2:c=>openIn('rental',c),ren2:c=>openIn('rental',c),tracker:k=>openIn(k,'',1),
  filt:q=>{q=q.toLowerCase();document.querySelectorAll('#cl .card').forEach(x=>x.style.display=(x.dataset.search||'').includes(q)?'block':'none')},
  edit:id=>openIn('rental',`openCustomerEdit('${id}')`),enable:id=>{S.setStatus(id,'available');render()}};
 history.replaceState({s:0},'');history.pushState({s:1},'');
@@ -110,6 +110,28 @@ function vExp(){const r=S.expenses(),dv=r.filter(x=>x.k==='device'),rn=r.filter(
 function vExpL(){const dv=cur.arg==='device',r=S.expenses().filter(x=>dv?x.k==='device':x.k!=='device'),t=r.reduce((a,x)=>a+x.amt,0);
  $('view').innerHTML=`<div class="card section-tint"><div class="row"><strong>${dv?'DEVICE SALE EXPENSES':'RENTAL EXPENSES'}</strong><strong>${money(t)}</strong></div><div class="tx-line">${r.length} entr${r.length==1?'y':'ies'} · latest first. Tap one to see the full entry.</div></div>${r.map(xcard).join('')||'<div class="empty">No expenses here.</div>'}<div class="total-bar"><span>TOTAL</span><span>${money(t)}</span></div>`}
 
+async function dlAll(){
+ try{await fresh()}catch(e){showErr(e);return}
+ const D=$('f_device').contentWindow,R=$('f_rental').contentWindow,J=(w,c)=>JSON.parse(w.eval('JSON.stringify('+c+')'));
+ const dev=J(D,"{p:state.devices.map(d=>[fmt(d.purchaseDate),d.name,d.type,d.serial,supplierName(d.supplierId),d.purchasedType==='lent'?'Lent':'Purchased',d.purchasedType==='purchased'?d.price:0,d.paymentType||'',d.status==='sold'?'Sold':d.status==='rental'?'Used for Rental':'Available']),s:state.sales.map(x=>{const d=device(x.deviceId)||{};return[fmt(x.sellDate),d.name||'',d.type||'',d.serial||'',x.customerName||'',x.customerPhone||'',x.devicePrice,x.maskName||'',x.maskQty||0,x.maskPrice,x.vendorExpense,x.otherExpense,saleNet(x),x.receivedType||'']}),m:state.masks.map(m=>[m.name,m.type,m.vendorName,m.date,m.price,maskQty(m),maskSoldQty(m)])}");
+ const ren=J(R,"{r:state.rentals.map(r=>{const e=equipment(r.equipmentId)||{};let due=0;try{due=r.status==='active'?currentStatus(r).due:0}catch(x){}return[customerName(r.customerId),e.name||'',e.serial||'',fmt(r.startDate),r.status==='active'?'Active':'Completed',r.checkInDate?fmt(r.checkInDate):'',r.monthly,r.oneTimeExtra||0,r.oneTimeExpense||0,rentalPaid(r),due,r.notes||'']}),p:state.payments.map(p=>{const r=state.rentals.find(x=>x.id===p.rentalId)||{};return[fmt(p.date),customerName(r.customerId),(equipment(r.equipmentId)||{}).name||'',p.amount,p.method||'',fmt(p.periodFrom),fmt(p.periodDue)]})}");
+ let ms=[];try{ms=(JSON.parse(localStorage.getItem('bharat_shared_v1')||'{}').maskSales)||[]}catch(e){}
+ const sum=(rows,i)=>rows.reduce((t,r)=>t+Number(r[i]||0),0),sec=(t,h,rows,tot)=>[[t],h,...rows,...(tot?[tot]:[]),[]];
+ const ex=S.expenses();
+ const rows=[['BHARAT SURGICALS - ALL REPORTS'],['Generated',fmt(new Date().toISOString().slice(0,10))],[],
+  ...sec('PURCHASED DEVICES',['Date','Device','Type','Serial','Supplier','Purchased/Lent','Purchase Value','Payment','Status'],dev.p,['','','','','','Total',sum(dev.p,6)]),
+  ...sec('SOLD DEVICES',['Sell Date','Device','Type','Serial','Customer','Phone','Device Price','Mask','Mask Qty','Mask Price','Vendor Expense','Other Expense','Net Sold','Received Type'],dev.s,['','','','','','Total','','','','','','',sum(dev.s,12)]),
+  ...sec('MASK STOCK',['Mask','Type','Vendor','Date','Unit Price','Available Qty','Sold Qty'],dev.m),
+  ...sec('MASK SALES (DIRECT + AGAINST RENTALS)',['Date','Mask','Qty','Price','Sold Against'],ms.map(x=>[fmt(x.date),x.maskName||'',x.qty||0,x.price||0,x.rentalId?'Rental':'Direct']),['','Total','','',sum(ms.map(x=>[0,0,0,x.price]),3)]),
+  ...sec('RENTALS',['Customer','Device','Serial','Start','Status','Checked In','Monthly Rent','Mask / Extra','Expense','Paid (all time)','Due Now','Notes'],ren.r),
+  ...sec('RENTAL PAYMENTS',['Date','Customer','Device','Amount','Method','Period From','Period To'],ren.p,['','','Total',sum(ren.p,3)]),
+  ...sec('MASK / EXTRA ON RENTALS',['Customer','Device','Start','Mask / Extra'],ren.r.filter(x=>Number(x[7])>0).map(x=>[x[0],x[1],x[3],x[7]])),
+  ...sec('EXPENSES',['Date','Item','Details','Amount'],ex.map(x=>[fmt(x.date),x.title,x.sub,x.amt]),['','','Total',ex.reduce((t,x)=>t+x.amt,0)]),
+  ...sec('CUSTOMERS',['Name','Phone','Address','Status'],S.customers().map(c=>[c.name,c.phone,c.address,c.status]))];
+ const ce=v=>{let s=String(v==null?'':v);if(/^[=@]/.test(s))s="'"+s;return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
+ const csv='\uFEFF'+rows.map(r=>r.map(ce).join(',')).join('\r\n');
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='Bharat_Surgicals_All_Reports_'+new Date().toISOString().slice(0,10)+'.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+}
 render();
 
 
