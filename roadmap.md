@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Merge uploaded v13, preserve Settings & Backup, and verify full-logo sizing and updated reports
+- [x] Merge uploaded v13, preserve Settings & Backup, and verify full-logo sizing and updated reports
 
 - [x] Merge uploaded v12 (supersedes v11), preserve Settings & Backup, and retain the full uncropped logo and padded icons
 - [x] Merge uploaded v9 update, preserve Settings & Backup, and fit the full supplied logo in all app icons
