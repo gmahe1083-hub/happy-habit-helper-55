@@ -338,5 +338,10 @@ button[class*=bt-]:active{transform:scale(.96)}
 .hub-ico.hi-rental{background:#fff!important;box-shadow:0 4px 10px -4px rgba(37,99,235,.7)}
 .hub-ico.hi-sold{background:#fff!important;box-shadow:0 4px 10px -4px rgba(225,29,72,.7)}
 
+.cust-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;border:0;border-radius:12px;padding:11px 14px;margin:8px 0;font-weight:800;font-size:14px;color:#fff;background:linear-gradient(135deg,#a78bfa,#6d28d9);box-shadow:0 6px 12px -8px rgba(15,23,42,.6)}
+.cust-btn:active{transform:scale(.97)}
+.dl-all{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:14px;padding:14px;margin:0 0 12px;font-weight:900;font-size:15px;color:#fff;background:linear-gradient(135deg,#22d3ee,#0e7490);box-shadow:0 8px 16px -10px rgba(15,23,42,.7)}
+.dl-all:active{transform:scale(.97)}.dl-note{font-size:12px;color:#64748b;margin:-4px 2px 12px}
+
 /* Preserve the complete logo and lettering in every header. */
 .brand-logo{width:48px;height:48px;flex:0 0 48px;object-fit:contain;object-position:center;padding:2px;border-radius:8px;background:var(--card)}
