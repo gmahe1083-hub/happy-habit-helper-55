@@ -21,7 +21,8 @@ let busy=false;
 async function openIn(k,code,page){if(busy)return;busy=true;ens();stack.push(cur);document.body.classList.add('loading');try{await freshOne(k)}catch(e){stack.pop();document.body.classList.remove('loading');busy=false;showErr(e);return}const f=$('f_'+k),w=f.contentWindow;w.__fromMain=true;w.__modalMain=!page;try{if(code)w.eval(code)}catch(e){console.error(e)}cur={p:'t',k};document.querySelectorAll('.trk').forEach(x=>x.classList.remove('on'));f.classList.add('on');document.body.classList.remove('loading');busy=false;setTimeout(()=>{if(cur.p==='t')$('shell').style.display='none'},320)}
 function back(){if(!$('sheet').classList.contains('hidden')){sheetBack();return true}
  if(cur.p==='t'){const w=$('f_'+cur.k).contentWindow;if(w.__shellBack&&w.__shellBack())return true}
- if(stack.length){dir=-1;cur=stack.pop();render();if(cur.reopen){const k=cur.reopen;cur.reopen=null;if(k==='expenses')setTimeout(()=>exp(cur.rarg),0)}return true}return false}
+ if(stack.length){dir=-1;cur=stack.pop();if(cur.p==='t')showTrk(cur.k);else render();if(cur.reopen){const k=cur.reopen;cur.reopen=null;if(k==='expenses')setTimeout(()=>exp(cur.rarg),0)}return true}return false}
+function showTrk(k){document.querySelectorAll('.trk').forEach(f=>f.classList.remove('on'));$('shell').style.display='none';$('f_'+k).classList.add('on')}
 function main(){stack=[];cur={p:'main'};render()}
 function ens(){if(history.state&&history.state.s===0)history.pushState({s:1},'')}
 function addMenu(){$('mt').textContent='Add';$('mb').innerHTML=[['device','📦 ADD DEVICE'],['mask','😷 ADD MASK'],['supplier','🏢 ADD SUPPLIER'],['customer','👥 ADD CUSTOMER']].map(([a,b])=>`<button class="${a==='device'?'primary-btn':'secondary-btn'}" style="width:100%;margin-bottom:10px" onclick="Shell.add('${a}')">${b}</button>`).join('');$('sheet').classList.remove('hidden')}
