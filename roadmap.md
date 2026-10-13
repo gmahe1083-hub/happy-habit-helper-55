@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Merge uploaded v15, preserve Settings & Backup, and verify the complete logo and updated tracker screens
+
 - [x] Merge uploaded v14, preserve Settings & Backup, and verify the full logo and rental-history navigation
 
 - [x] Merge uploaded v13, preserve Settings & Backup, and verify full-logo sizing and updated reports
