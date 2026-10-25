@@ -1,5 +1,13 @@
 {
   "version": "7",
   "dialect": "postgresql",
-  "entries": []
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1792952368250,
+      "tag": "0000_create_cloud_backup",
+      "breakpoints": true
+    }
+  ]
 }

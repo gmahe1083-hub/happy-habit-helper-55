@@ -343,5 +343,50 @@ button[class*=bt-]:active{transform:scale(.96)}
 .dl-all{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:14px;padding:14px;margin:0 0 12px;font-weight:900;font-size:15px;color:#fff;background:linear-gradient(135deg,#22d3ee,#0e7490);box-shadow:0 8px 16px -10px rgba(15,23,42,.7)}
 .dl-all:active{transform:scale(.97)}.dl-note{font-size:12px;color:#64748b;margin:-4px 2px 12px}
 
+/* ===== v16: full-page screens (no popups), app-style slide transitions ===== */
+@keyframes pgIn{from{transform:translateX(100%)}to{transform:none}}
+@keyframes pgOut{from{transform:none}to{transform:translateX(100%)}}
+@keyframes pgF{from{transform:translateX(32%);opacity:.35}to{transform:none;opacity:1}}
+@keyframes pgB{from{transform:translateX(-24%);opacity:.35}to{transform:none;opacity:1}}
+body .modal,body #sheet.modal{align-items:stretch!important;justify-content:stretch!important;padding:0!important;background:#eef5f7!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;overflow:hidden!important}
+body .modal:not(.hidden){animation:none!important}
+body .modal-card,body #sheet .modal-card{margin:0!important;width:100%!important;max-width:none!important;height:100%!important;max-height:none!important;border-radius:0!important;box-shadow:none!important;padding:0!important;background:#eef5f7!important;display:flex;flex-direction:column;overflow:hidden}
+body .modal:not(.hidden) .modal-card{animation:pgIn .32s cubic-bezier(.22,.8,.24,1)!important}
+body .modal:not(.hidden) .modal-card.pgf{animation:pgF .28s cubic-bezier(.22,.8,.24,1)!important}
+body .modal:not(.hidden) .modal-card.pgb{animation:pgB .28s cubic-bezier(.22,.8,.24,1)!important}
+body .modal-head{position:relative!important;top:0!important;flex:0 0 auto;display:flex!important;align-items:center;gap:10px;margin:0!important;border-radius:0!important;padding:calc(10px + env(safe-area-inset-top)) 12px 12px!important;background:linear-gradient(135deg,#0f968d,#0b7a8f)!important;box-shadow:0 6px 16px -8px rgba(0,0,0,.5);z-index:5}
+body .modal-head-actions{display:contents!important}
+body .modal-head h2{order:1;flex:1;min-width:0;margin:0!important;font-size:19px!important;color:#fff!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body .modal-head .close-btn{order:0;position:relative;width:40px!important;height:40px!important;border-radius:12px!important;font-size:0!important;background:rgba(255,255,255,.22)!important;flex:0 0 auto}
+body .modal-head .close-btn::before{content:"‹";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:32px;line-height:1;color:#fff;padding-bottom:4px}
+body .modal-head .modal-save{order:2;flex:0 0 auto}
+body #modalBody,body #mb{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px max(14px,calc((100% - 760px)/2)) calc(36px + env(safe-area-inset-bottom))!important}
+/* nested add screens (supplier / customer) become full pages too */
+.pop-layer{align-items:stretch!important;justify-content:stretch!important;padding:0!important;background:#eef5f7!important;opacity:1!important;transition:none!important}
+.pop-card{width:100%!important;max-width:none!important;max-height:none!important;height:100%;border-radius:0!important;padding:0!important;box-shadow:none!important;background:#eef5f7!important;transform:translateX(100%)!important;transition:transform .24s cubic-bezier(.22,.8,.24,1)!important}
+.pop-layer.show .pop-card{transform:none!important}
+.pop-card .modal-head{display:flex!important;align-items:center;gap:10px;margin:0!important;border-radius:0!important;padding:calc(10px + env(safe-area-inset-top)) 12px 12px!important;box-shadow:0 6px 16px -8px rgba(0,0,0,.5)}
+.pop-card .modal-head-actions{display:contents!important}
+.pop-card .modal-head h2{order:1;flex:1}
+.pop-card .close-btn{order:0;position:relative;font-size:0!important;width:40px!important;height:40px!important}
+.pop-card .close-btn::before{content:"‹";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:32px;line-height:1;color:#fff;padding-bottom:4px}
+.pop-card .modal-save{order:2}
+.pop-body{padding:14px max(14px,calc((100% - 760px)/2)) calc(36px + env(safe-area-inset-bottom))!important}
+/* exit: a snapshot of the closed screen slides away to the right */
+.pg-ghost{position:fixed!important;inset:0;z-index:95!important;pointer-events:none;animation:pgOut .26s cubic-bezier(.4,0,.9,.6) forwards!important}
+.pg-ghost .modal-card{animation:none!important}
+@media(prefers-reduced-motion:reduce){body .modal:not(.hidden) .modal-card,.pop-card{animation:none!important;transition:none!important}.pg-ghost{display:none}}
+
+.tile .emoji{color:#fff}
+
+/* ===== v19 dashboard: 8 tiles, simple device cards ===== */
+.dashboard-main .stat:nth-child(6){background:linear-gradient(135deg,#fb7185,#e11d48)!important;--ico:"⏰"}
+.dashboard-main .stat:nth-child(7){background:linear-gradient(135deg,#22d3ee,#0e7490)!important;--ico:"😷"}
+.dashboard-main .stat:nth-child(8){background:var(--g4)!important;--ico:"🧾"}
+.type-card{padding:14px 8px 12px;border-top:5px solid #94a3b8}
+.type-card b{font-size:15px;margin-bottom:6px}
+.type-card.tk-cpap{border-top-color:#14b8a6}.type-card.tk-bipap{border-top-color:#3b82f6}.type-card.tk-o2{border-top-color:#8b5cf6}
+.type-card.tk-cpap b{color:#0f766e}.type-card.tk-bipap b{color:#1d4ed8}.type-card.tk-o2 b{color:#6d28d9}
+
 /* Preserve the complete logo and lettering in every header. */
 .brand-logo{width:48px;height:48px;flex:0 0 48px;object-fit:contain;object-position:center;padding:2px;border-radius:8px;background:var(--card)}

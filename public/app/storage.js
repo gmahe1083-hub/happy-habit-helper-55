@@ -132,8 +132,58 @@
     alert('Backup restored.');
     location.reload();
   }
+  /* ---------- Cloud backup (shared online copy) ---------- */
+  var CLOUD_URL = 'https://ymdcuqsioeqpebopswbs.supabase.co';
+  var CLOUD_KEY = 'sb_publishable_wRx8Hvcvs-0RQ_Oxgst8Gw_5zvGSKjU';
+  function cloudHeaders(extra) {
+    var h = { apikey: CLOUD_KEY, 'Content-Type': 'application/json' };
+    if (extra) for (var k in extra) h[k] = extra[k];
+    return h;
+  }
+  async function cloudPush(btn) {
+    try {
+      btn.disabled = true; btn.textContent = 'Updating…';
+      await flush();
+      var payload = {
+        app: 'Bharat Surgicals Tracker', format: 'unified', version: 1, exportedAt: new Date().toISOString(),
+        data: { shared: parse(KEYS[0]), device: parse(KEYS[1]), rental: parse(KEYS[2]) }
+      };
+      var r = await fetch(CLOUD_URL + '/rest/v1/cloud_backup', {
+        method: 'POST',
+        headers: cloudHeaders({ Prefer: 'resolution=merge-duplicates' }),
+        body: JSON.stringify({ id: 1, payload: payload, updated_at: new Date().toISOString() })
+      });
+      if (!r.ok) throw new Error('Cloud error ' + r.status);
+      origSet.call(localStorage, 'bharat_last_cloud', new Date().toISOString());
+      alert('Cloud backup updated. Anyone with the app can now restore this data.');
+    } catch (e) { alert('Cloud update failed: ' + (e && e.message || e)); }
+    openBackup();
+  }
+  async function cloudPull(btn) {
+    try {
+      btn.disabled = true; btn.textContent = 'Checking…';
+      var r = await fetch(CLOUD_URL + '/rest/v1/cloud_backup?id=eq.1&select=payload,updated_at', { headers: cloudHeaders() });
+      if (!r.ok) throw new Error('Cloud error ' + r.status);
+      var rows = await r.json();
+      if (!rows.length) { alert('No cloud backup yet. Use "Update cloud backup" first.'); openBackup(); return; }
+      var d = rows[0].payload && rows[0].payload.data;
+      if (!d) throw new Error('Cloud backup is empty');
+      var msg = 'Cloud backup from ' + new Date(rows[0].updated_at).toLocaleString() + '\n\n' + counts(d) +
+        '\n\nALL current data on this device will be replaced. Continue?';
+      if (!confirm(msg)) { openBackup(); return; }
+      if (d.shared !== undefined) { cache[KEYS[0]] = d.shared == null ? undefined : JSON.stringify(d.shared); dirty[KEYS[0]] = 1; }
+      if (d.device) { cache[KEYS[1]] = JSON.stringify(d.device); dirty[KEYS[1]] = 1; }
+      if (d.rental) { cache[KEYS[2]] = JSON.stringify(d.rental); dirty[KEYS[2]] = 1; }
+      Object.keys(cache).forEach(function (k) { if (cache[k] === undefined) delete cache[k]; });
+      await flush();
+      alert('Cloud backup restored.');
+      location.reload();
+    } catch (e) { alert('Cloud restore failed: ' + (e && e.message || e)); openBackup(); }
+  }
+
   function openBackup() {
     var last = origGet.call(localStorage, 'bharat_last_backup');
+    var lastC = origGet.call(localStorage, 'bharat_last_cloud');
     document.getElementById('mt').textContent = 'Settings & Backup';
     document.getElementById('mb').innerHTML =
       '<p style="margin:0 0 12px;color:#697586;font-size:14px">One file with all device, rental, customer and mask-sale data. ' +
@@ -144,12 +194,18 @@
       '<label style="display:block;text-align:center;padding:14px;border:2px solid #0f968d;border-radius:12px;color:#0f968d;font-weight:700;font-size:15px">Restore from file' +
       '<input id="bk_imp" type="file" accept="application/json,.json" style="display:none"></label>' +
       '<p style="margin:10px 0 0;color:#697586;font-size:12px">Also accepts older Device Tracker and Rental Tracker backups.</p>' +
+      '<h3 style="margin:20px 0 8px;font-size:16px">Cloud backup</h3>' +
+      '<p style="margin:0 0 10px;color:#697586;font-size:13px">One shared copy stored online. Anyone with the app can restore it. Last update: <b>' + (lastC ? new Date(lastC).toLocaleString() : 'never') + '</b></p>' +
+      '<button id="cl_up" style="width:100%;padding:14px;border:0;border-radius:12px;background:#0b7a8f;color:#fff;font-weight:700;font-size:15px;margin-bottom:10px">Update cloud backup</button>' +
+      '<button id="cl_dn" style="width:100%;padding:14px;border:2px solid #0b7a8f;border-radius:12px;background:#fff;color:#0b7a8f;font-weight:700;font-size:15px">Restore from cloud</button>' +
       '<h3 style="margin:20px 0 8px;font-size:16px">App lock</h3>' +
       '<p style="margin:0 0 10px;color:#697586;font-size:13px">Protects customer ID proofs and money records. Asks for the PIN when the app opens or after 1 minute away.</p>' +
       '<button id="sec_pin" style="width:100%;padding:13px;border:0;border-radius:12px;background:#182336;color:#fff;font-weight:700;font-size:15px">' + (window.BharatSecurity && BharatSecurity.hasPin() ? 'Turn off app lock' : 'Set PIN lock') + '</button>' +
       '<h3 style="margin:20px 0 8px;font-size:16px">Rent alerts</h3>' +
       '<p id="sec_notes" style="margin:0;color:#697586;font-size:13px">The phone will remind you at 9 AM on each rent due date, and daily while any rent is overdue.</p>';
     document.getElementById('bk_exp').onclick = exportAll;
+    document.getElementById('cl_up').onclick = function () { cloudPush(this); };
+    document.getElementById('cl_dn').onclick = function () { cloudPull(this); };
     document.getElementById('sec_pin').onclick = async function () {
       if (!window.BharatSecurity) return;
       if (BharatSecurity.hasPin()) await BharatSecurity.removePin(); else await BharatSecurity.setPin();
