@@ -132,8 +132,58 @@
     alert('Backup restored.');
     location.reload();
   }
+  /* ---------- Cloud backup (shared online copy) ---------- */
+  var CLOUD_URL = 'https://ymdcuqsioeqpebopswbs.supabase.co';
+  var CLOUD_KEY = 'sb_publishable_wRx8Hvcvs-0RQ_Oxgst8Gw_5zvGSKjU';
+  function cloudHeaders(extra) {
+    var h = { apikey: CLOUD_KEY, 'Content-Type': 'application/json' };
+    if (extra) for (var k in extra) h[k] = extra[k];
+    return h;
+  }
+  async function cloudPush(btn) {
+    try {
+      btn.disabled = true; btn.textContent = 'Updating…';
+      await flush();
+      var payload = {
+        app: 'Bharat Surgicals Tracker', format: 'unified', version: 1, exportedAt: new Date().toISOString(),
+        data: { shared: parse(KEYS[0]), device: parse(KEYS[1]), rental: parse(KEYS[2]) }
+      };
+      var r = await fetch(CLOUD_URL + '/rest/v1/cloud_backup', {
+        method: 'POST',
+        headers: cloudHeaders({ Prefer: 'resolution=merge-duplicates' }),
+        body: JSON.stringify({ id: 1, payload: payload, updated_at: new Date().toISOString() })
+      });
+      if (!r.ok) throw new Error('Cloud error ' + r.status);
+      origSet.call(localStorage, 'bharat_last_cloud', new Date().toISOString());
+      alert('Cloud backup updated. Anyone with the app can now restore this data.');
+    } catch (e) { alert('Cloud update failed: ' + (e && e.message || e)); }
+    openBackup();
+  }
+  async function cloudPull(btn) {
+    try {
+      btn.disabled = true; btn.textContent = 'Checking…';
+      var r = await fetch(CLOUD_URL + '/rest/v1/cloud_backup?id=eq.1&select=payload,updated_at', { headers: cloudHeaders() });
+      if (!r.ok) throw new Error('Cloud error ' + r.status);
+      var rows = await r.json();
+      if (!rows.length) { alert('No cloud backup yet. Use "Update cloud backup" first.'); openBackup(); return; }
+      var d = rows[0].payload && rows[0].payload.data;
+      if (!d) throw new Error('Cloud backup is empty');
+      var msg = 'Cloud backup from ' + new Date(rows[0].updated_at).toLocaleString() + '\n\n' + counts(d) +
+        '\n\nALL current data on this device will be replaced. Continue?';
+      if (!confirm(msg)) { openBackup(); return; }
+      if (d.shared !== undefined) { cache[KEYS[0]] = d.shared == null ? undefined : JSON.stringify(d.shared); dirty[KEYS[0]] = 1; }
+      if (d.device) { cache[KEYS[1]] = JSON.stringify(d.device); dirty[KEYS[1]] = 1; }
+      if (d.rental) { cache[KEYS[2]] = JSON.stringify(d.rental); dirty[KEYS[2]] = 1; }
+      Object.keys(cache).forEach(function (k) { if (cache[k] === undefined) delete cache[k]; });
+      await flush();
+      alert('Cloud backup restored.');
+      location.reload();
+    } catch (e) { alert('Cloud restore failed: ' + (e && e.message || e)); openBackup(); }
+  }
+
   function openBackup() {
     var last = origGet.call(localStorage, 'bharat_last_backup');
+    var lastC = origGet.call(localStorage, 'bharat_last_cloud');
     document.getElementById('mt').textContent = 'Settings & Backup';
     document.getElementById('mb').innerHTML =
       '<p style="margin:0 0 12px;color:#697586;font-size:14px">One file with all device, rental, customer and mask-sale data. ' +
