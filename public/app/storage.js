@@ -204,6 +204,8 @@
       '<h3 style="margin:20px 0 8px;font-size:16px">Rent alerts</h3>' +
       '<p id="sec_notes" style="margin:0;color:#697586;font-size:13px">The phone will remind you at 9 AM on each rent due date, and daily while any rent is overdue.</p>';
     document.getElementById('bk_exp').onclick = exportAll;
+    document.getElementById('cl_up').onclick = function () { cloudPush(this); };
+    document.getElementById('cl_dn').onclick = function () { cloudPull(this); };
     document.getElementById('sec_pin').onclick = async function () {
       if (!window.BharatSecurity) return;
       if (BharatSecurity.hasPin()) await BharatSecurity.removePin(); else await BharatSecurity.setPin();
