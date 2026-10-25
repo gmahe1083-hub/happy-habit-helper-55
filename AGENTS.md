@@ -19,3 +19,4 @@
 - The unified backup (`format: "unified"`) is the single export; import also accepts old per-tracker files. Why: PRD backup requirement.
 - App lock and rent reminders live in `public/app/security.js`, loaded after the trackers; reminders reuse the rental tracker's own `alerts()` function. Why: no duplicated billing logic.
 - Logo and icon images are source-controlled under `public/` and `public/app/`, with contained header sizing and padded home-screen variants. Why: Capacitor must package the logo offline and launcher masks must not crop it.
+- Cloud backup is a single shared row in `public.cloud_backup` (id=1), pushed/pulled manually from Settings & Backup in `public/app/storage.js` via PostgREST with the publishable key; anon read/write is intentional (no per-user accounts). Why: user wants one shared online copy anyone with the app can restore, without logins.
