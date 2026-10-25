@@ -194,6 +194,10 @@
       '<label style="display:block;text-align:center;padding:14px;border:2px solid #0f968d;border-radius:12px;color:#0f968d;font-weight:700;font-size:15px">Restore from file' +
       '<input id="bk_imp" type="file" accept="application/json,.json" style="display:none"></label>' +
       '<p style="margin:10px 0 0;color:#697586;font-size:12px">Also accepts older Device Tracker and Rental Tracker backups.</p>' +
+      '<h3 style="margin:20px 0 8px;font-size:16px">Cloud backup</h3>' +
+      '<p style="margin:0 0 10px;color:#697586;font-size:13px">One shared copy stored online. Anyone with the app can restore it. Last update: <b>' + (lastC ? new Date(lastC).toLocaleString() : 'never') + '</b></p>' +
+      '<button id="cl_up" style="width:100%;padding:14px;border:0;border-radius:12px;background:#0b7a8f;color:#fff;font-weight:700;font-size:15px;margin-bottom:10px">Update cloud backup</button>' +
+      '<button id="cl_dn" style="width:100%;padding:14px;border:2px solid #0b7a8f;border-radius:12px;background:#fff;color:#0b7a8f;font-weight:700;font-size:15px">Restore from cloud</button>' +
       '<h3 style="margin:20px 0 8px;font-size:16px">App lock</h3>' +
       '<p style="margin:0 0 10px;color:#697586;font-size:13px">Protects customer ID proofs and money records. Asks for the PIN when the app opens or after 1 minute away.</p>' +
       '<button id="sec_pin" style="width:100%;padding:13px;border:0;border-radius:12px;background:#182336;color:#fff;font-weight:700;font-size:15px">' + (window.BharatSecurity && BharatSecurity.hasPin() ? 'Turn off app lock' : 'Set PIN lock') + '</button>' +
