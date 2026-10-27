@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Merge v29, preserve backups, shared updates and uncropped logos, and verify smooth transitions
+
 - [x] Merge v26, preserving Settings & Backup, cloud backup, automatic shared updates, and full uncropped logos
 
 - [x] Merge v25, preserving Settings & Backup, cloud backup, and full uncropped logos
