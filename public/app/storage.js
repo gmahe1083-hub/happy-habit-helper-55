@@ -37,7 +37,9 @@
     dirty = {};
     if (!Object.keys(batch).length) return Promise.resolve();
     return idbPutMany(batch).catch(function (e) {
+      Object.keys(batch).forEach(function (k) { dirty[k] = 1; });
       alert('Saving failed: ' + (e && e.message || e) + '. Please export a backup.');
+      throw e;
     });
   }
   function schedule(k) { dirty[k] = 1; clearTimeout(timer); timer = setTimeout(flush, 300); }
@@ -53,7 +55,7 @@
       return g.apply(this, arguments);
     };
     SP.setItem = function (k, v) {
-      if (this === win.localStorage && KEYS.indexOf(k) >= 0) { cache[k] = String(v); schedule(k); return; }
+      if (this === win.localStorage && KEYS.indexOf(k) >= 0) { if (cache[k] !== String(v)) { cache[k] = String(v); schedule(k); } return; }
       return s.apply(this, arguments);
     };
     SP.removeItem = function (k) {
@@ -140,6 +142,63 @@
     if (extra) for (var k in extra) h[k] = extra[k];
     return h;
   }
+  var sync;
+  function snapshot() { return { shared: parse(KEYS[0]), device: parse(KEYS[1]), rental: parse(KEYS[2]) }; }
+  async function cloudRequest(path, init) {
+    var response = await fetch(CLOUD_URL + '/rest/v1/shared_app_updates' + path, Object.assign({ headers: cloudHeaders(), cache: 'no-store', signal: AbortSignal.timeout(8000) }, init));
+    if (!response.ok) throw new Error('Cloud error ' + response.status);
+    return response.json();
+  }
+  async function startSync() {
+    sync = BharatCloudSync.create({
+      readMeta: function () { return parse('bharat_sync_meta'); },
+      writeMeta: function (value) { cache.bharat_sync_meta = JSON.stringify(value); return idbPutMany({ bharat_sync_meta: cache.bharat_sync_meta }); },
+      snapshot: snapshot,
+      empty: function () { return Object.values(snapshot()).every(function (d) { return !d || Object.values(d).every(function (v) { return !Array.isArray(v) || !v.length; }); }); },
+      idle: function () { return !document.hidden && window.bharatSyncIdle && window.bharatSyncIdle(); },
+      recovery: function (data) { return idbPutMany({ bharat_before_shared_update: JSON.stringify({ app: 'Bharat Surgicals Tracker', format: 'unified', version: 1, data: data }) }); },
+      apply: async function (data) {
+        var names = ['shared', 'device', 'rental'];
+        names.forEach(function (name, i) { if (!(name in data)) throw new Error('Incomplete shared data'); });
+        var batch = {};
+        names.forEach(function (name, i) { batch[KEYS[i]] = data[name] == null ? null : JSON.stringify(data[name]); });
+        await idbPutMany(batch);
+        KEYS.forEach(function (k) { if (batch[k] == null) delete cache[k]; else cache[k] = batch[k]; delete dirty[k]; });
+      },
+      refresh: function () { location.reload(); },
+      latest: async function (revision) {
+        if (revision) {
+          var heads = await cloudRequest('?id=eq.1&select=revision');
+          if (heads.length && heads[0].revision === revision) return { revision: revision };
+        }
+        var rows = await cloudRequest('?id=eq.1&select=payload,revision');
+        return rows[0] || null;
+      },
+      publish: async function (payload, revision) {
+        await flush();
+        var rows = await cloudRequest(revision ? '?id=eq.1&revision=eq.' + revision : '', {
+          method: revision ? 'PATCH' : 'POST',
+          headers: cloudHeaders({ Prefer: 'return=representation' }),
+          body: JSON.stringify({ id: 1, payload: payload, revision: revision + 1, updated_at: new Date().toISOString() })
+        });
+        if (!rows.length) throw new Error('Another device uploaded first. Export your local backup, then receive the latest shared data before editing again.');
+        return rows[0];
+      },
+      status: function (text, waiting) {
+        var el = document.getElementById('sync_status'); if (el) el.textContent = text;
+        var receive = document.getElementById('sync_receive'); if (receive) receive.hidden = !waiting;
+      }
+    });
+    await sync.check(true);
+  }
+  async function uploadShared(btn) {
+    if (!sync) return;
+    if (!confirm('Upload this device’s full data as the shared version? Other devices will receive it automatically. Anyone with the app can view and update it.')) return;
+    btn.disabled = true; btn.textContent = 'Uploading…';
+    try { await sync.upload(); await flush(); alert('Uploaded. Other online devices will update automatically when their current screen closes.'); }
+    catch (e) { alert('Upload failed: ' + e.message + '. Your local entries are kept.'); await sync.check(false); }
+    openBackup();
+  }
   async function cloudPush(btn) {
     try {
       btn.disabled = true; btn.textContent = 'Updating…';
@@ -198,6 +257,10 @@
       '<p style="margin:0 0 10px;color:#697586;font-size:13px">One shared copy stored online. Anyone with the app can restore it. Last update: <b>' + (lastC ? new Date(lastC).toLocaleString() : 'never') + '</b></p>' +
       '<button id="cl_up" style="width:100%;padding:14px;border:0;border-radius:12px;background:#0b7a8f;color:#fff;font-weight:700;font-size:15px;margin-bottom:10px">Update cloud backup</button>' +
       '<button id="cl_dn" style="width:100%;padding:14px;border:2px solid #0b7a8f;border-radius:12px;background:#fff;color:#0b7a8f;font-weight:700;font-size:15px">Restore from cloud</button>' +
+      '<h3 class="section-title">Shared updates</h3>' +
+      '<p id="sync_status" class="muted small"></p>' +
+      '<button id="sync_upload" class="primary-btn" style="width:100%;margin:10px 0">Upload & update all devices</button>' +
+      '<button id="sync_receive" class="secondary-btn" style="width:100%" hidden>Receive latest shared data</button>' +
       '<h3 style="margin:20px 0 8px;font-size:16px">App lock</h3>' +
       '<p style="margin:0 0 10px;color:#697586;font-size:13px">Protects customer ID proofs and money records. Asks for the PIN when the app opens or after 1 minute away.</p>' +
       '<button id="sec_pin" style="width:100%;padding:13px;border:0;border-radius:12px;background:#182336;color:#fff;font-weight:700;font-size:15px">' + (window.BharatSecurity && BharatSecurity.hasPin() ? 'Turn off app lock' : 'Set PIN lock') + '</button>' +
@@ -206,6 +269,14 @@
     document.getElementById('bk_exp').onclick = exportAll;
     document.getElementById('cl_up').onclick = function () { cloudPush(this); };
     document.getElementById('cl_dn').onclick = function () { cloudPull(this); };
+    document.getElementById('sync_status').textContent = sync ? sync.status() : 'Cloud unavailable — local data is kept.';
+    document.getElementById('sync_upload').disabled = !sync;
+    document.getElementById('sync_upload').onclick = function () { uploadShared(this); };
+    document.getElementById('sync_receive').hidden = !sync || !sync.waiting();
+    document.getElementById('sync_receive').onclick = async function () {
+      if (!sync || !confirm('Replace local entries with the latest shared data? Export a full backup first if you have entries that were not uploaded.')) return;
+      try { await sync.receive(); } catch (e) { alert('Could not receive shared data: ' + e.message); }
+    };
     document.getElementById('sec_pin').onclick = async function () {
       if (!window.BharatSecurity) return;
       if (BharatSecurity.hasPin()) await BharatSecurity.removePin(); else await BharatSecurity.setPin();
@@ -232,13 +303,24 @@
     try {
       db = await open();
       for (var i = 0; i < KEYS.length; i++) { var v = await idbGet(KEYS[i]); if (v != null) cache[KEYS[i]] = v; }
+      var meta = await idbGet('bharat_sync_meta'); if (meta) cache.bharat_sync_meta = meta;
       await migrate();
       if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(function () {});
       patch(window);
+      await startSync();
     } catch (e) {
       alert('Storage could not start (' + (e && e.message || e) + '). Using temporary storage — please export a backup.');
     }
     loadScripts(['shared.js', 'trackers.js', 'app.js', 'security.js']);
     addBackupButton();
+    if (sync) {
+      var ready = setInterval(function () {
+        if (!window.bharatSyncIdle || !window.bharatSyncIdle() || !document.querySelector('#view .stat')) return;
+        clearInterval(ready); sync.activate();
+        setInterval(function () { if (!document.hidden) sync.check(false); }, 5000);
+        window.addEventListener('online', function () { sync.check(false); });
+        document.addEventListener('visibilitychange', function () { if (!document.hidden) sync.check(false); });
+      }, 100);
+    }
   })();
 })();
