@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Merge v26, preserving Settings & Backup, cloud backup, automatic shared updates, and full uncropped logos
+
 - [x] Merge v25, preserving Settings & Backup, cloud backup, and full uncropped logos
 - [x] Add manual upload with automatic shared updates on other devices, protecting unpublished local entries
 
