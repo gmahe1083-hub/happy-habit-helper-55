@@ -32,6 +32,27 @@ export type Database = {
         }
         Relationships: []
       }
+      shared_app_updates: {
+        Row: {
+          id: number
+          payload: Json
+          revision: number
+          updated_at: string
+        }
+        Insert: {
+          id?: number
+          payload: Json
+          revision?: number
+          updated_at?: string
+        }
+        Update: {
+          id?: number
+          payload?: Json
+          revision?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
