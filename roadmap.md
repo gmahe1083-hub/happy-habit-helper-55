@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Merge uploaded v20, preserving Settings & Backup, shared cloud update/restore, and the full uncropped logo; verify updated tracker and backups
+- [x] Merge uploaded v20, preserving Settings & Backup, shared cloud update/restore, and the full uncropped logo; verify updated tracker and backups
 
 - [x] Merge uploaded v19 (supersedes v17), preserve Settings & Backup and the full logo, and add Cloud backup (update/restore) in Settings & Backup
 
