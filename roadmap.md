@@ -1,7 +1,7 @@
 # Roadmap
 
-- [ ] Merge v25, preserving Settings & Backup, cloud backup, and full uncropped logos
-- [ ] Add manual upload with automatic shared updates on other devices, protecting unpublished local entries
+- [x] Merge v25, preserving Settings & Backup, cloud backup, and full uncropped logos
+- [x] Add manual upload with automatic shared updates on other devices, protecting unpublished local entries
 
 - [x] Merge uploaded v24 (after v22, v20), preserving Settings & Backup, shared cloud update/restore, and the full uncropped logo
 

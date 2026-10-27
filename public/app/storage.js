@@ -145,14 +145,14 @@
   var sync;
   function snapshot() { return { shared: parse(KEYS[0]), device: parse(KEYS[1]), rental: parse(KEYS[2]) }; }
   async function cloudRequest(path, init) {
-    var response = await fetch(CLOUD_URL + '/rest/v1/shared_app_updates' + path, Object.assign({ headers: cloudHeaders(), cache: 'no-store' }, init));
+    var response = await fetch(CLOUD_URL + '/rest/v1/shared_app_updates' + path, Object.assign({ headers: cloudHeaders(), cache: 'no-store', signal: AbortSignal.timeout(8000) }, init));
     if (!response.ok) throw new Error('Cloud error ' + response.status);
     return response.json();
   }
   async function startSync() {
     sync = BharatCloudSync.create({
       readMeta: function () { return parse('bharat_sync_meta'); },
-      writeMeta: function (value) { cache.bharat_sync_meta = JSON.stringify(value); dirty.bharat_sync_meta = 1; schedule('bharat_sync_meta'); },
+      writeMeta: function (value) { cache.bharat_sync_meta = JSON.stringify(value); return idbPutMany({ bharat_sync_meta: cache.bharat_sync_meta }); },
       snapshot: snapshot,
       empty: function () { return Object.values(snapshot()).every(function (d) { return !d || Object.values(d).every(function (v) { return !Array.isArray(v) || !v.length; }); }); },
       idle: function () { return !document.hidden && window.bharatSyncIdle && window.bharatSyncIdle(); },

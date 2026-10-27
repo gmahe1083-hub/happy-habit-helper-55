@@ -14,7 +14,7 @@
     var meta = options.readMeta() || {}, pending = null, checking = false, publishing = false;
     var status = 'Checking shared updates…', bootApplied = false;
     function localChanged() { return meta.baseline !== fingerprint(options.snapshot()); }
-    function save() { options.writeMeta(meta); }
+    function save() { return options.writeMeta(meta); }
     function setStatus(text) { status = text; options.status(text, !!pending); }
     async function apply(row, boot) {
       if (!row.payload || row.payload.format !== 'unified' || !row.payload.data) throw new Error('Invalid shared data');
@@ -22,7 +22,7 @@
       await options.recovery(options.snapshot());
       await options.apply(row.payload.data);
       meta = { revision: row.revision, baseline: fingerprint(options.snapshot()) };
-      save(); pending = null; bootApplied = !!boot;
+      await save(); pending = null; bootApplied = !!boot;
       setStatus('Shared data is up to date.');
       if (!boot) options.refresh();
     }
@@ -48,7 +48,7 @@
       var snapshot = options.snapshot(), signature = fingerprint(snapshot);
       try {
         var row = await options.publish({ app: 'Bharat Surgicals Tracker', format: 'unified', version: 1, exportedAt: new Date().toISOString(), data: snapshot }, meta.revision || 0);
-        meta = { revision: row.revision, baseline: signature }; save(); pending = null;
+        meta = { revision: row.revision, baseline: signature }; await save(); pending = null;
         setStatus(localChanged() ? 'Uploaded. Newer local entries still need uploading.' : 'Uploaded — other devices receive this update automatically.');
       } finally { publishing = false; }
     }
