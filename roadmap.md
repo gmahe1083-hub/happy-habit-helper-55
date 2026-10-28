@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Merge v33-2, preserving Settings & Backup, cloud backup/restore, automatic shared updates, smooth transitions, and full uncropped logos; verified monthly summaries, return to sale, persistence and isolated two-device sharing
+
 - [x] Merge v31 (manual Amount Due at Checkout override, text SAVE buttons, button styling), preserving Settings & Backup, cloud backup, shared updates, and the full uncropped logo
 - [x] Merge v30 (device-card Check Out shortcut, quick-customer ID proofs, card layout tweaks), preserving Settings & Backup, cloud backup, shared updates, and the full uncropped logo
 
