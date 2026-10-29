@@ -149,7 +149,7 @@ paint();let tm;new MutationObserver(function(){clearTimeout(tm);tm=setTimeout(pa
 
 /* ===== v34 receipts (image / PDF) ===== */
 const RX={logo:null,canvas:null,data:null};
-const rcLogo=()=>new Promise(res=>{if(RX.logo&&RX.logo.complete)return res(RX.logo);const i=new Image();i.onload=()=>{RX.logo=i;res(i)};i.onerror=()=>res(null);i.src='bharat-logo.jpg'});
+const rcLogo=()=>new Promise(res=>{if(RX.logo&&RX.logo.complete)return res(RX.logo);const i=new Image();i.onload=()=>{RX.logo=i;res(i)};i.onerror=()=>res(null);i.src='bharat-logo.png'});
 const RF='Inter, "Segoe UI", Roboto, Arial, sans-serif';
 function rcRR(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
 function rcWrap(c,t,mw){const out=[];String(t).split('\n').forEach(p=>{let l='';p.split(/\s+/).forEach(w=>{const n=l?l+' '+w:w;if(c.measureText(n).width>mw&&l){out.push(l);l=w}else l=n});out.push(l)});return out}
