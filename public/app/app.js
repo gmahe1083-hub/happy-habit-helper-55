@@ -207,7 +207,8 @@ function rcDraw(c,d,kind,draw){
  y+=14;
  if(draw){const g=c.createLinearGradient(0,y,W,y+120);g.addColorStop(0,'#0a66c2');g.addColorStop(1,'#0b4a96');c.fillStyle=g;c.fillRect(0,y,W,120);
   c.textAlign='left';c.fillStyle='rgba(255,255,255,.85)';c.font='600 24px '+RF;if(c.letterSpacing!==undefined)c.letterSpacing='3px';c.fillText('CURRENT RENT',44,y+72);if(c.letterSpacing!==undefined)c.letterSpacing='0px';
-  c.textAlign='right';c.fillStyle='#fff';c.font='800 58px '+RF;c.fillText(rcM(rent),W-44,y+82)}
+  c.textAlign='right';c.fillStyle='#fff';c.font='800 58px '+RF;c.fillText(rcM(rent),W-44,y+82);
+  c.strokeStyle='#7f9fcc';c.lineWidth=2;c.strokeRect(1,1,W-2,y+120-2)}
  return y+120}
 async function rcBuild(d,kind){await rcLogo();const S2=2,W=720;const m=document.createElement('canvas').getContext('2d');const H=rcDraw(m,d,kind,false);const cv=document.createElement('canvas');cv.width=W*S2;cv.height=Math.ceil(H)*S2;const c=cv.getContext('2d');c.scale(S2,S2);rcDraw(c,d,kind,true);RX.canvas=cv;return cv}
 function rcName(ext){const d=RX.data||{};return 'Receipt_'+String((d.customer&&d.customer.name)||'customer').replace(/[^\w]+/g,'_')+'_'+(d.today||'')+'.'+ext}
