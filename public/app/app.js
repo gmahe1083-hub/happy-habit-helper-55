@@ -15,7 +15,7 @@ const showErr=e=>{$('shell').style.display='block';document.querySelectorAll('.t
 const fresh=()=>{S.reconcile();return Promise.all([load('device'),load('rental')])};
 const freshOne=k=>{S.reconcile();return load(k)};
 let dir=1;
-function render(){window.scrollTo(0,0);const vw=$('view');vw.classList.remove('pf','pb');void vw.offsetWidth;vw.classList.add(dir>0?'pf':'pb');$('shell').style.display='block';document.querySelectorAll('.trk').forEach(f=>f.classList.remove('on'));$('title').textContent=T[cur.p];$('back').style.visibility=cur.p==='main'?'hidden':'visible';({main:vMain,customers:vCust,customer:vCustD,reports:vRep,expenses:vExp,custlist:vCustL,expl:vExpL})[cur.p]()}
+function render(){window.scrollTo(0,0);const vw=$('view');vw.classList.remove('pf','pb');void vw.offsetWidth;vw.classList.add(dir>0?'pf':'pb');$('shell').style.display='block';document.querySelectorAll('.trk').forEach(f=>f.classList.remove('on'));$('title').textContent=T[cur.p];$('fnav').style.display=cur.p==='main'?'flex':'none';$('back').style.visibility=cur.p==='main'?'hidden':'visible';({main:vMain,customers:vCust,customer:vCustD,reports:vRep,expenses:vExp,custlist:vCustL,expl:vExpL})[cur.p]()}
 function go(p,arg){dir=1;ens();stack.push(cur);cur={p,arg};render()}
 let busy=false;
 window.bharatSyncIdle=()=>!busy&&cur.p!=='t'&&$("sheet").classList.contains("hidden")&&!document.getElementById("lockscreen")&&!document.body.classList.contains("loading");
@@ -37,16 +37,16 @@ async function vMain2(){const v=$('view');v.innerHTML='<div class="empty">Loadin
  let alN=0,alH='';try{alN=R.eval('alerts().length');alH=R.eval("alerts().map(alertCard).join('')").replace(/onclick="openRental\('([^']+)'\)"/g,(m,id)=>`onclick="Shell.ren('openRental(\\'${id}\\')')"`)}catch(e){console.error(e)}
  let ds=[];try{ds=JSON.parse(D.eval("JSON.stringify(state.devices.map(d=>[d.type,d.status]))"))}catch(e){}
  const tc=k=>{const l=ds.filter(x=>DevIcons.kind(x[0])===k);return [l.filter(x=>x[1]==='purchased'||x[1]==='lent').length,l.filter(x=>x[1]==='rental').length,l.filter(x=>x[1]==='sold').length]};
- const typeCard=(k,n)=>{const c=tc(k);return `<div class="type-card tk-${k}" onclick="Shell.dev('showAllDevices()')"><b>${n}</b><div class="tcl"><span class="d av"></span>${c[0]} Available</div><div class="tcl"><span class="d rn"></span>${c[1]} On rental</div><div class="tcl"><span class="d sd"></span>${c[2]} Sold</div></div>`};
+ const typeCard=(k,n)=>{const c=tc(k);return `<div class="type-card tk-${k}" onclick="Shell.dev('showAllDevices()')"><b>${n}</b><div class="tcl"><span class="d av"></span>${c[0]} Available</div><div class="tcl"><span class="d rn"></span>${c[1]} Rental</div><div class="tcl"><span class="d sd"></span>${c[2]} Sold</div></div>`};
  const n=D.eval('totalDeviceCount()'),rn=R.eval('activeRentals().length'),pu=D.eval('totalPurchased()'),so=D.eval('totalSold()'),rv=R.eval('totalRentalIncome()'),due=R.eval('activeRentals().reduce((s,r)=>s+currentStatus(r).due,0)'),mx=R.eval('state.rentals.reduce((s,r)=>s+Number(r.oneTimeExtra||0),0)'),ex=D.eval('totalExpenses()')+R.eval("state.rentals.reduce((s,r)=>s+Number(r.oneTimeExpense||0),0)");
- let mv=0;try{mv=R.eval("(()=>{const k=new Date().toISOString().slice(0,7);return state.payments.filter(p=>String(p.date||'').slice(0,7)===k).reduce((s,p)=>s+Number((typeof paymentRentalAmount==='function'?paymentRentalAmount(p):p.amount)||0),0)})()")}catch(e){}
- const mnth=new Date().toLocaleDateString('en-IN',{month:'short',year:'numeric'});
- const st=(c,x,l,f)=>`<div class="stat ${c}" onclick="${f}"><div class="num">${x}</div><div class="label">${l}</div></div>`;
- v.innerHTML=`<div class="month-line" onclick="Shell.ren('showIncome()')"><span>📅 ${mnth}</span><span class="ml-val">Rental ${money(mv)}</span><span class="ml-due">Due ${money(due)}</span></div><div class="dashboard-grid dashboard-main">${st('income',n,'Available Devices',"Shell.dev('showAllDevices()')")}${st('rented',rn,'Rentals',"Shell.ren('showRentalValue()')")}${st('income',money(pu),'Total Purchased Value',"Shell.dev('showPurchased()')")}${st('rented',money(so),'Total Sold Value',"Shell.dev('showValue()')")}${st('value',money(rv),'Total Rental Value',"Shell.ren('showIncome()')")}${st('due',money(due),'Total Rental Due',"Shell.ren('showDue()')")}${st('extra',money(mx),'Mask / Extra',"Shell.ren('showExtras()')")}${st('due',money(ex),'Total Expenses',"Shell.exp()")}</div>
+ const st=(c,x,l,f,sb)=>`<div class="stat ${c}" onclick="${f}"><div class="num">${x}</div><div class="label">${l}</div>${sb?`<div class="sub">${sb}</div>`:''}</div>`;
+ const dAv=ds.filter(x=>x[1]==='purchased'||x[1]==='lent').length,dRn=ds.filter(x=>x[1]==='rental').length,dSd=ds.filter(x=>x[1]==='sold').length;
+ let rTot=0,rAv=0,rDn=0,mRent=0;try{rTot=R.eval('state.rentals.length');rDn=R.eval("state.rentals.filter(r=>r.status!=='active').length");rAv=R.eval("state.equipment.filter(e=>e.status!=='rented'&&!e.forSale&&!e.sold&&!e.notWorking).length");mRent=R.eval("(()=>{const ym=isoDate(new Date()).slice(0,7);return state.payments.filter(p=>String(p.date).slice(0,7)===ym).reduce((s,p)=>s+Number(paymentRentalAmount(p)||0),0)})()")}catch(e){console.error(e)}
+ const mLab=new Date().toLocaleDateString('en-IN',{month:'short',year:'numeric'});
+ v.innerHTML=`<div class="monthbar" onclick="Shell.ren('showIncome()')"><span class="mb-m">${mLab}</span><span class="mb-r">Rental ${money(mRent)}</span><span class="mb-d">Due ${money(due)}</span></div><div class="dashboard-grid dashboard-main">${st('income',dAv,'Available Devices',"Shell.dev('showAllDevices()')",['Total '+ds.length,'Available '+dAv,'Rental '+dRn,'Sold '+dSd].map(x=>'<span>'+x+'</span>').join(''))}${st('rented',rn,'Running Rentals',"Shell.ren('showRentalValue()')",['Total '+rTot,'Available '+rAv,'Completed '+rDn].map(x=>'<span>'+x+'</span>').join(''))}${st('income',money(pu),'Total Purchased Value',"Shell.dev('showPurchased()')")}${st('rented',money(so),'Total Sold Value',"Shell.dev('showValue()')")}${st('value',money(rv),'Total Rental Value',"Shell.ren('showIncome()')")}${st('due',money(due),'Total Rental Due',"Shell.ren('showDue()')")}${st('extra',money(mx),'Mask / Extra',"Shell.ren('showExtras()')")}${st('due',money(ex),'Total Expenses',"Shell.exp()")}</div>
  <h2 class="section-title">Our Devices</h2><div class="types">${typeCard('cpap','CPAP')}${typeCard('bipap','BiPAP')}${typeCard('o2','Oxygen Conc.')}</div>
  <h2 class="section-title">Quick Actions</h2><div class="quick three"><button onclick="Shell.addMenu()"><span class="qi"><svg class="tki" viewBox="0 0 48 48" width="34" height="34" aria-hidden="true"><circle class="dot" cx="24" cy="24" r="19" fill="#fff" fill-opacity=".95"/><path d="M24 14v20M14 24h20" stroke="#0f968d" stroke-width="5" stroke-linecap="round"/></svg></span>ADD</button><button onclick="Shell.tracker('device')"><span class="qi"><svg class="tki" viewBox="0 0 48 48" width="34" height="34" aria-hidden="true"><rect x="4" y="11" width="40" height="26" rx="8" fill="#fff" fill-opacity=".95"/><circle cx="13" cy="24" r="4.2" fill="#0f968d"/><path class="ecg" d="M21 25h5l2.2-7 3.4 13 3-6h4.4" fill="none" stroke="#e11d48" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="44"/></svg></span>DEVICE TRACKER</button><button onclick="Shell.tracker('rental')"><span class="qi"><svg class="tki" viewBox="0 0 48 48" width="34" height="34" aria-hidden="true"><g class="spin" fill="none" stroke="#fff" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"><path d="M39 22a15 15 0 0 0-27-6"/><path d="M11 9v8h8"/><path d="M9 26a15 15 0 0 0 27 6"/><path d="M37 39v-8h-8"/></g><circle class="dot" cx="24" cy="24" r="5.5" fill="#fde047"/></svg></span>RENTAL TRACKER</button></div>
- <h2 class="section-title">⏰ Due / Renewal Alerts${alN?`<span class="sec-badge">${alN}</span>`:''}</h2><div class="alert-list">${alH||'<div class="empty">No due or renewal alerts in the next 3 days. 🎉</div>'}</div>
- <h2 class="section-title">Manage</h2><div class="manage"><div class="tile" onclick="Shell.dev('showAllDevices()')"><span class="emoji"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="11" rx="3"/><circle cx="8.5" cy="12.5" r="1.7"/><path d="M13 11h5M13 14h3"/></svg></span>Devices</div><div class="tile" onclick="Shell.dev('showMasks()')"><span class="emoji"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9c4-3 12-3 16 0v3c0 4-3 7-8 7s-8-3-8-7z"/><path d="M7.5 12h9M7.5 15h9"/></svg></span>Masks</div><div class="tile" onclick="Shell.dev('navigate(\\'suppliers\\');historyStack.length=0',1)"><span class="emoji"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V9l8-5 8 5v11"/><path d="M9 20v-6h6v6"/></svg></span>Suppliers</div><div class="tile" onclick="Shell.go('customers')"><span class="emoji"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14c3 0 5 2 5 5"/></svg></span>Customers</div><div class="tile" onclick="Shell.go('reports')"><span class="emoji"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 20V11M12 20V4M19 20v-6"/></svg></span>Reports</div></div>`}
+ <h2 class="section-title">⏰ Due / Renewal Alerts${alN?`<span class="sec-badge">${alN}</span>`:''}</h2><div class="alert-list">${alH||'<div class="empty">No due or renewal alerts in the next 3 days. 🎉</div>'}</div>`}
 function vCust(){const cs=S.customers();$('view').innerHTML=`<div class="row"><h2 class="section-title" style="margin:0">Customers</h2><button class="small-icon-btn" onclick="Shell.add('customer')">＋</button></div><input class="list-search" placeholder="Search customers" oninput="Shell.filt(this.value)"><div id="cl">${cs.map(c=>{const h=S.hist(c.id),b=S.custStatus(c.id);return `<div class="card" data-search="${esc((c.name+' '+c.phone).toLowerCase())}" onclick="Shell.go('customer','${c.id}')"><div class="row"><strong>${esc(c.name||'Unnamed')}</strong><span class="muted">${esc(c.phone||'')}</span></div><div class="small muted">${esc(c.address||'No address')}</div><div class="row small" style="margin-top:7px"><span>${h.rentals.length} rental(s) · ${h.sales.length} sale(s)</span><span class="badge ${b.cls}">Status - ${b.label}</span></div></div>`}).join('')||'<div class="empty">No customers yet.</div>'}</div>`}
 function vCustD(){const c=S.get(cur.arg);if(!c){back();return}const h=S.hist(c.id),b=S.custStatus(c.id);
  let pf=[];try{pf=$('f_rental').contentWindow.eval("((state.customers.find(c=>c.id==='"+c.id+"')||{}).idProofs||[]).map(p=>p.name||'Attachment')")}catch(e){}
@@ -146,3 +146,86 @@ const SEL='button.primary-btn,button.secondary-btn,button.danger-btn,button.deta
 function paint(){document.querySelectorAll(SEL).forEach(function(b){if(b.dataset.bt)return;if(b.closest('.sold-btn,.quick,.dtabs'))return;const t=(b.textContent||'').toUpperCase();let k='';for(let i=0;i<R.length;i++){if(R[i][0].test(t)){k=R[i][1];break}}b.dataset.bt=k||'x';if(k)b.classList.add('bt-'+k)})}
 paint();let tm;new MutationObserver(function(){clearTimeout(tm);tm=setTimeout(paint,20)}).observe(document.body,{childList:true,subtree:true});
 })();
+
+/* ===== v34 receipts (image / PDF) ===== */
+const RX={logo:null,canvas:null,data:null};
+const rcLogo=()=>new Promise(res=>{if(RX.logo&&RX.logo.complete)return res(RX.logo);const i=new Image();i.onload=()=>{RX.logo=i;res(i)};i.onerror=()=>res(null);i.src='bharat-logo.png'});
+const RF='Inter, "Segoe UI", Roboto, Arial, sans-serif';
+function rcRR(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
+function rcWrap(c,t,mw){const out=[];String(t).split('\n').forEach(p=>{let l='';p.split(/\s+/).forEach(w=>{const n=l?l+' '+w:w;if(c.measureText(n).width>mw&&l){out.push(l);l=w}else l=n});out.push(l)});return out}
+const rcM=n=>'₹'+Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:2});
+const rcD=v=>v?new Date(v+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}):'-';
+function rcDraw(c,d,kind,draw){
+ const W=720,M=28,P=28,IW=W-2*M-2*P,full=kind==='full';
+ const rent=Number(d.rent||0),mask=Number(d.mask||0),exp=Number(d.expense||0),paid=rent+mask+(full?exp:0);
+ const secs=[];
+ const rows=a=>a.filter(x=>x[2]||x[1]!=='');
+ const rentalRows=full&&d.notes?[['Check-out notes',d.notes]]:[];
+ secs.push({t:'Rental',bg:'#ffeed9',tc:'#b45309',lc:'#e08a12',lb:'#8a5a1f',rental:true,rows:rentalRows});
+ secs.push({t:'Customer',bg:'#e6f0fd',tc:'#1d4f9e',lc:'#1d4f9e',lb:'#4b6a96',rows:(full?[['Name',d.customer.name],['Phone',d.customer.phone],['Address',d.customer.address],['Notes',d.customer.notes]]:[['Name',d.customer.name],['Address',d.customer.address]]).filter(x=>x[1])});
+ secs.push({t:'Device',bg:'#ece8fb',tc:'#5b3fc4',lc:'#6d4fd0',lb:'#6a5aa8',rows:[['Name',d.device.name],['Type',d.device.type],['Serial number',d.device.serial]].concat(full?[['Notes',d.device.notes]]:[]).filter(x=>x[1])});
+ const pr=[['Rent',rcM(rent)],['Mask / Extra',rcM(mask)]];if(d.maskType)pr.push(['Mask type',d.maskType]);if(full)pr.push(['Expense',rcM(exp)]);pr.push(['Total paid',rcM(paid),'hl']);pr.push(['Balance due',rcM(d.bal)]);
+ secs.push({t:'Payment',bg:'#e0f3e6',tc:'#166534',lc:'#2a9d5b',lb:'#4d7a5f',rows:pr,lines:true});
+ // header
+ c.textBaseline='alphabetic';
+ let y=0;
+ if(draw){const g=c.createLinearGradient(0,0,0,360);g.addColorStop(0,'#d3e4f8');g.addColorStop(1,'#ffffff');c.fillStyle='#fff';c.fillRect(0,0,W,3000);c.fillStyle=g;c.fillRect(0,0,W,360);
+  c.save();c.shadowColor='rgba(30,70,140,.25)';c.shadowBlur=24;c.shadowOffsetY=8;c.fillStyle='#fff';rcRR(c,W/2-65,40,130,130,34);c.fill();c.restore();
+  if(RX.logo){const lw=106,r=RX.logo.width/RX.logo.height;let w=lw,h=lw/r;if(h>lw){h=lw;w=lw*r}c.drawImage(RX.logo,W/2-w/2,52+(106-h)/2,w,h)}
+  c.textAlign='center';c.fillStyle='#0f4c9a';c.font='800 40px '+RF;c.fillText('Bharat Surgicals',W/2,228);
+  c.fillStyle='#4a78b8';c.font='500 22px '+RF;c.fillText(full?'Full rental receipt':'Rental receipt',W/2,262);
+  c.font='700 24px '+RF;const dt=rcD(d.today),pw=c.measureText(dt).width+56;c.fillStyle='#fff';rcRR(c,W/2-pw/2,282,pw,50,25);c.fill();c.strokeStyle='#b9c9e4';c.lineWidth=2;c.stroke();c.fillStyle='#0f3d82';c.fillText(dt,W/2,316)}
+ y=360;
+ secs.forEach(sc=>{
+  const top=y;let h=84;
+  c.font='700 25px '+RF;
+  const prep=sc.rows.map(r=>{const mw=IW-(r[0].length>12?250:190);const ls=rcWrap(c,r[1],mw);return {r,ls,h:Math.max(r[2]?56:46,ls.length*32+14)}});
+  if(sc.rental)h+=130;
+  prep.forEach(p=>h+=p.h);h+=P-8;
+  if(draw){c.fillStyle=sc.bg;rcRR(c,M,top,W-2*M,h,36);c.fill();
+   c.textAlign='center';c.fillStyle=sc.tc;c.font='800 27px '+RF;c.fillText(sc.t,W/2,top+46);c.fillStyle=sc.lc;c.fillRect(M+P,top+62,IW,3)}
+  let yy=top+84;
+  if(sc.rental){
+   if(draw){const x0=M+P,x1=M+P+IW,act=d.status==='active';
+    c.textAlign='left';c.fillStyle=sc.lb;c.font='500 22px '+RF;c.fillText('Rented start',x0,yy+16);c.textAlign='right';c.fillText(act?'Due date':'Check-in date',x1,yy+16);
+    c.fillStyle='#1b2333';c.font='800 28px '+RF;c.textAlign='left';c.fillText(rcD(d.start),x0,yy+52);c.textAlign='right';c.fillText(rcD(act?d.due:d.checkIn),x1,yy+52);
+    const by=yy+76,bh=12;c.fillStyle='#eadcc4';rcRR(c,x0,by,IW,bh,6);c.fill();
+    let fr=1,lab='Rental completed';
+    if(act){const day=86400000,a=new Date(d.from+'T00:00:00'),b=new Date(d.due+'T00:00:00'),t=new Date(d.today+'T00:00:00');const tot=Math.max(1,Math.round((b-a)/day)+1),el=Math.min(tot,Math.max(1,Math.round((t-a)/day)+1));fr=el/tot;lab='Today, '+el+' of '+tot+' days'}
+    const fw=Math.max(bh,IW*fr);c.fillStyle='#e08a12';rcRR(c,x0,by,fw,bh,6);c.fill();
+    if(act){c.fillStyle='#fff';c.beginPath();c.arc(x0+fw,by+bh/2,13,0,7);c.fill();c.strokeStyle='#e08a12';c.lineWidth=5;c.stroke()}
+    c.fillStyle=sc.lb;c.font='500 21px '+RF;c.textAlign='right';c.fillText(lab,Math.min(x1,x0+fw+40),by+44)}
+   yy+=130}
+  prep.forEach((p,i)=>{
+   if(draw){const x0=M+P,x1=M+P+IW;
+    if(p.r[2]){c.fillStyle='#c3e8cf';rcRR(c,x0-14,yy+2,IW+28,50,18);c.fill()}
+    c.textAlign='left';c.fillStyle=p.r[2]?'#166534':sc.lb;c.font=(p.r[2]?'800 25px ':'500 24px ')+RF;c.fillText(p.r[0],p.r[2]?x0+4:x0,yy+(p.r[2]?36:32));
+    c.textAlign='right';c.fillStyle=p.r[2]?'#166534':'#1b2333';c.font='700 25px '+RF;p.ls.forEach((l,k)=>c.fillText(l,p.r[2]?x1-4:x1,yy+(p.r[2]?36:32)+k*32));
+    if(sc.lines&&i<prep.length-1&&!p.r[2]&&!(prep[i+1]&&prep[i+1].r[2])){c.fillStyle='rgba(60,110,80,.18)';c.fillRect(x0,yy+p.h-4,IW,1.5)}}
+   yy+=p.h});
+  y=top+h+18});
+ y+=14;
+ if(draw){const g=c.createLinearGradient(0,y,W,y+120);g.addColorStop(0,'#0a66c2');g.addColorStop(1,'#0b4a96');c.fillStyle=g;c.fillRect(0,y,W,120);
+  c.textAlign='left';c.fillStyle='rgba(255,255,255,.85)';c.font='600 24px '+RF;if(c.letterSpacing!==undefined)c.letterSpacing='3px';c.fillText('CURRENT RENT',44,y+72);if(c.letterSpacing!==undefined)c.letterSpacing='0px';
+  c.textAlign='right';c.fillStyle='#fff';c.font='800 58px '+RF;c.fillText(rcM(rent),W-44,y+82)}
+ return y+120}
+async function rcBuild(d,kind){await rcLogo();const S2=2,W=720;const m=document.createElement('canvas').getContext('2d');const H=rcDraw(m,d,kind,false);const cv=document.createElement('canvas');cv.width=W*S2;cv.height=Math.ceil(H)*S2;const c=cv.getContext('2d');c.scale(S2,S2);rcDraw(c,d,kind,true);RX.canvas=cv;return cv}
+function rcName(ext){const d=RX.data||{};return 'Receipt_'+String((d.customer&&d.customer.name)||'customer').replace(/[^\w]+/g,'_')+'_'+(d.today||'')+'.'+ext}
+function rcDl(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
+function rcPdf(jpg,w,h){const enc=s=>{const a=new Uint8Array(s.length);for(let i=0;i<s.length;i++)a[i]=s.charCodeAt(i)&255;return a};const pw=420,ph=Math.round(420*h/w),parts=[],offs=[];let len=0;const push=b=>{if(typeof b==='string')b=enc(b);parts.push(b);len+=b.length};const obj=(n,b)=>{offs[n]=len;push(n+' 0 obj\n'+b+'\nendobj\n')};
+ push('%PDF-1.4\n');obj(1,'<< /Type /Catalog /Pages 2 0 R >>');obj(2,'<< /Type /Pages /Kids [3 0 R] /Count 1 >>');obj(3,'<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+pw+' '+ph+'] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>');
+ offs[4]=len;push('4 0 obj\n<< /Type /XObject /Subtype /Image /Width '+w+' /Height '+h+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+jpg.length+' >>\nstream\n');push(jpg);push('\nendstream\nendobj\n');
+ const cs='q '+pw+' 0 0 '+ph+' 0 0 cm /Im0 Do Q';obj(5,'<< /Length '+cs.length+' >>\nstream\n'+cs+'\nendstream');
+ const x=len;push('xref\n0 6\n0000000000 65535 f \n'+[1,2,3,4,5].map(n=>String(offs[n]).padStart(10,'0')+' 00000 n \n').join(''));push('trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n'+x+'\n%%EOF');
+ const out=new Uint8Array(len);let p=0;parts.forEach(b=>{out.set(b,p);p+=b.length});return out}
+function rcSave(f){const cv=RX.canvas;if(!cv)return;
+ if(f==='png')cv.toBlob(b=>rcDl(b,rcName('png')),'image/png');
+ else{const u=cv.toDataURL('image/jpeg',0.92),bin=atob(u.split(',')[1]),a=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i);rcDl(new Blob([rcPdf(a,cv.width,cv.height)],{type:'application/pdf'}),rcName('pdf'))}}
+function rcShare(){const cv=RX.canvas;if(!cv)return;cv.toBlob(b=>{const f=new File([b],rcName('png'),{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f],title:'Receipt'}).catch(()=>{});else rcDl(b,rcName('png'))},'image/png')}
+function receipt(json){try{RX.data=typeof json==='string'?JSON.parse(json):json}catch(e){return}if(!RX.data)return;
+ sheet('Receipt','<div class="muted" style="margin-bottom:10px">Choose which receipt to create. You can save it as an image or a PDF.</div><div class="actions" style="flex-direction:column"><button class="primary-btn" onclick="Shell.rcShow(\'full\')">📄 FULL RECEIPT <small style="font-weight:600">· for you</small></button><button class="secondary-btn" onclick="Shell.rcShow(\'cust\')">🧾 CUSTOMER RECEIPT <small style="font-weight:600">· to share</small></button></div>')}
+async function rcShow(kind){const cv=await rcBuild(RX.data,kind),canShare=!!(navigator.canShare&&navigator.share);
+ sheet(kind==='full'?'Full receipt':'Customer receipt','<div class="actions rc-act"><button class="primary-btn" onclick="Shell.rcSave(\'png\')">SAVE AS IMAGE</button><button class="secondary-btn" onclick="Shell.rcSave(\'pdf\')">SAVE AS PDF</button>'+(canShare?'<button class="secondary-btn" onclick="Shell.rcShare()">SHARE</button>':'')+'</div><img class="rc-prev" style="margin-top:14px" src="'+cv.toDataURL('image/png')+'" alt="Receipt">')}
+async function deviceReceipt(did){const h=S.eqHist(did);if(!h.length)return alert('No rental found for this device.');const x=h.find(v=>v.status==='active')||h.slice().sort((a,b)=>String(b.start).localeCompare(String(a.start)))[0];
+ try{const w=await freshOne('rental');const d=w.receiptData(x.id);if(d)receipt(JSON.stringify(d))}catch(e){alert('Could not create the receipt.')}}
+Object.assign(Shell,{receipt,rcShow,rcSave,rcShare,deviceReceipt});
