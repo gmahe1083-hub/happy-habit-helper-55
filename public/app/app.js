@@ -15,7 +15,7 @@ const showErr=e=>{$('shell').style.display='block';document.querySelectorAll('.t
 const fresh=()=>{S.reconcile();return Promise.all([load('device'),load('rental')])};
 const freshOne=k=>{S.reconcile();return load(k)};
 let dir=1;
-function render(){window.scrollTo(0,0);const vw=$('view');vw.classList.remove('pf','pb');void vw.offsetWidth;vw.classList.add(dir>0?'pf':'pb');$('shell').style.display='block';document.querySelectorAll('.trk').forEach(f=>f.classList.remove('on'));$('title').textContent=T[cur.p];$('fnav').style.display=cur.p==='main'?'flex':'none';$('back').style.visibility=cur.p==='main'?'hidden':'visible';({main:vMain,customers:vCust,customer:vCustD,reports:vRep,expenses:vExp,custlist:vCustL,expl:vExpL})[cur.p]()}
+function render(){window.scrollTo(0,0);const vw=$('view');vw.classList.remove('pf','pb');void vw.offsetWidth;vw.classList.add(dir>0?'pf':'pb');$('shell').style.display='block';document.querySelectorAll('.trk').forEach(f=>f.classList.remove('on'));$('title').textContent=T[cur.p];if(cur.p==='main')navOn(0);$('back').style.visibility=cur.p==='main'?'hidden':'visible';({main:vMain,customers:vCust,customer:vCustD,reports:vRep,expenses:vExp,custlist:vCustL,expl:vExpL})[cur.p]()}
 function go(p,arg){dir=1;ens();stack.push(cur);cur={p,arg};render()}
 let busy=false;
 window.bharatSyncIdle=()=>!busy&&cur.p!=='t'&&$("sheet").classList.contains("hidden")&&!document.getElementById("lockscreen")&&!document.body.classList.contains("loading");
@@ -229,3 +229,11 @@ async function rcShow(kind){const cv=await rcBuild(RX.data,kind),canShare=!!(nav
 async function deviceReceipt(did){const h=S.eqHist(did);if(!h.length)return alert('No rental found for this device.');const x=h.find(v=>v.status==='active')||h.slice().sort((a,b)=>String(b.start).localeCompare(String(a.start)))[0];
  try{const w=await freshOne('rental');const d=w.receiptData(x.id);if(d)receipt(JSON.stringify(d))}catch(e){alert('Could not create the receipt.')}}
 Object.assign(Shell,{receipt,rcShow,rcSave,rcShare,deviceReceipt});
+
+/* ===== v35 floating menu everywhere ===== */
+function navOn(i){document.querySelectorAll('#fnav button').forEach((b,k)=>b.classList.toggle('on',k===i))}
+$('fnav').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const l=[...document.querySelectorAll('#fnav button')];navOn(l.indexOf(b))});
+function navVis(){let hide=false;try{if(!$('sheet').classList.contains('hidden')&&$('mt').textContent==='Add')hide=true;
+ if(cur.p==='t'){const d=$('f_'+cur.k).contentWindow.document;if(d.querySelector('#modal:not(.hidden) form')||d.querySelector('.pop-layer'))hide=true}}catch(e){}
+ const n=$('fnav'),v=hide?'none':'flex';if(n.style.display!==v)n.style.display=v}
+setInterval(navVis,250);navVis();
