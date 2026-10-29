@@ -415,3 +415,5 @@ body .modal:not(.hidden) .modal-card,body .modal:not(.hidden) .modal-card.pgf,bo
 .pop-card{transition-duration:var(--screen-duration)!important;transition-timing-function:var(--screen-ease)!important}
 #mapToast{transition-property:transform,opacity}
 @media(prefers-reduced-motion:reduce){#view.pf,#view.pb,.trk.on,body .modal:not(.hidden) .modal-card,body .modal:not(.hidden) .modal-card.pgf,body .modal:not(.hidden) .modal-card.pgb{animation:none!important}.pop-card{transition:none!important}}
+
+.month-line{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:12px;font-weight:700;padding:7px 12px;margin:0 0 10px;border-radius:10px;background:#fff7e0;color:#7a5200;border:1px solid #f3dc9a}.month-line .ml-val{color:#0f7f77}.month-line .ml-due{color:#c83939}
