@@ -35,3 +35,5 @@
 - [ ] Phase 5: device testing, APK/AAB build, distribution choice (needs your phones/keys)
 - [x] Merge v34 (bottom menu, month line) keeping Settings & Backup, cloud sync, full logo
 - [x] Merge v35 (floating menu on all screens, Sold button) keeping Settings & Backup, cloud sync, full logo
+
+- [ ] Merge v38 receipt artwork and receipt shortcuts, preserving Settings & Backup, cloud backup, shared updates, receipt theme, smooth transitions and full logos; verify downloads and navigation
