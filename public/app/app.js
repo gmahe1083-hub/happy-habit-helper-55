@@ -159,6 +159,9 @@ function rcGly(c,k,x,y,s,col,lw){c.save();c.translate(x,y);c.scale(s,s);c.stroke
  if(k==='cal'){rcRR(c,-15,-13,30,28,5);c.stroke();c.beginPath();c.moveTo(-15,-4);c.lineTo(15,-4);c.moveTo(-7,-17);c.lineTo(-7,-9);c.moveTo(7,-17);c.lineTo(7,-9);c.stroke();[[-8,3],[0,3],[8,3],[-8,10],[0,10]].forEach(p=>{c.beginPath();c.arc(p[0],p[1],1.8,0,7);c.fill()})}
  else if(k==='user'){c.beginPath();c.arc(0,-6,8,0,7);c.stroke();c.beginPath();c.moveTo(-15,15);c.quadraticCurveTo(-15,3,0,3);c.quadraticCurveTo(15,3,15,15);c.stroke()}
  else if(k==='dev'){rcRR(c,-16,-13,32,26,6);c.stroke();c.beginPath();c.arc(-6,-2,4,0,7);c.stroke();c.beginPath();c.arc(7,-2,2,0,7);c.fill();c.beginPath();c.moveTo(-9,7);c.lineTo(9,7);c.stroke()}
+ else if(k==='hosp'){rcRR(c,-14,-10,28,26,3);c.stroke();c.beginPath();c.moveTo(0,-18);c.lineTo(0,-10);c.moveTo(-4,-14);c.lineTo(4,-14);c.stroke();[[-7,-3],[0,-3],[7,-3],[-7,4],[7,4]].forEach(p=>{c.fillRect(p[0]-2,p[1]-2,4,4)});c.strokeRect(-3,8,6,8)}
+ else if(k==='maskl'){c.beginPath();c.moveTo(0,-16);c.bezierCurveTo(12,-16,16,6,13,12);c.quadraticCurveTo(0,20,-13,12);c.bezierCurveTo(-16,6,-12,-16,0,-16);c.stroke();c.beginPath();c.ellipse(0,4,6,7,0,0,7);c.stroke();c.beginPath();c.moveTo(-14,-2);c.lineTo(-19,-8);c.moveTo(14,-2);c.lineTo(19,-8);c.stroke()}
+ else if(k==='coins'){[[-4,10],[-4,4],[-4,-2]].forEach(p=>{c.beginPath();c.ellipse(p[0]+6,p[1],10,4,0,0,7);c.stroke()});c.beginPath();c.arc(-8,2,9,0,7);c.stroke();c.font='800 11px sans-serif';c.textAlign='center';c.fillText('₹',-8,6)}
  else if(k==='card'){rcRR(c,-16,-11,32,22,5);c.stroke();c.beginPath();c.moveTo(-16,-4);c.lineTo(16,-4);c.stroke();c.beginPath();c.arc(-8,5,2,0,7);c.fill();c.beginPath();c.moveTo(0,5);c.lineTo(10,5);c.stroke()}
  c.restore()}
 function rcLungs(c,x,y,s,col,lw){c.save();c.translate(x,y);c.scale(s,s);c.strokeStyle=col;c.lineWidth=lw/s;c.lineCap='round';c.lineJoin='round';
@@ -189,10 +192,10 @@ function rcDraw(c,d,kind,draw){
  const secs=[];
  const rentalRows=full&&d.notes?[['Check-out notes',d.notes]]:[];
  secs.push({t:'Rental',g:'cal',bg:'#ffefdc',bd:'#f3c78f',tc:'#d9650b',lc:'#e8921f',ic:['#ffa24a','#ee6a0a'],lb:'#7a4a14',rental:true,rows:rentalRows});
- secs.push({t:'Customer',g:'user',bg:'#e3eefc',bd:'#b4cdf0',tc:'#1d4fb8',lc:'#2f6fd0',ic:['#3aa0ff','#1366d6'],lb:'#436596',rows:(full?[['Name',d.customer.name],['Phone',d.customer.phone],['Address',d.customer.address],['Notes',d.customer.notes]]:[['Name',d.customer.name],['Address',d.customer.address]]).filter(x=>x[1])});
- secs.push({t:'Device',g:'dev',bg:'#ece7fb',bd:'#c9bcf0',tc:'#5b2fc4',lc:'#7a52d6',ic:['#9a6bff','#5a30c8'],lb:'#5f4aa6',rows:[['Name',d.device.name],['Type',d.device.type],['Serial number',d.device.serial]].concat(full?[['Notes',d.device.notes]]:[]).filter(x=>x[1])});
+ secs.push({t:'Customer',g:'user',rg:'hosp',bg:'#e3eefc',bd:'#b4cdf0',tc:'#1d4fb8',lc:'#2f6fd0',ic:['#3aa0ff','#1366d6'],lb:'#436596',rows:(full?[['Name',d.customer.name],['Phone',d.customer.phone],['Address',d.customer.address],['Notes',d.customer.notes]]:[['Name',d.customer.name],['Address',d.customer.address]]).filter(x=>x[1])});
+ secs.push({t:'Device',g:'dev',rg:'maskl',dev:true,bg:'#ece7fb',bd:'#c9bcf0',tc:'#5b2fc4',lc:'#7a52d6',ic:['#9a6bff','#5a30c8'],lb:'#5f4aa6',rows:[['Name',d.device.name],['Type',d.device.type],['Serial number',d.device.serial]].concat(full?[['Notes',d.device.notes]]:[]).filter(x=>x[1])});
  const pr=[['Rent',rcM(rent)],['Mask / Extra',rcM(mask)]];if(d.maskType)pr.push(['Mask type',d.maskType]);if(full)pr.push(['Expense',rcM(exp)]);pr.push(['Total paid',rcM(paid),'hl']);pr.push(['Balance due',rcM(d.bal)]);
- secs.push({t:'Payment',g:'card',bg:'#e1f3e6',bd:'#a9d9b8',tc:'#157a36',lc:'#2fa356',ic:['#34c26a','#12803a'],lb:'#3f6f52',rows:pr,lines:true});
+ secs.push({t:'Payment',g:'card',rg:'coins',bg:'#e1f3e6',bd:'#a9d9b8',tc:'#157a36',lc:'#2fa356',ic:['#34c26a','#12803a'],lb:'#3f6f52',rows:pr,lines:true});
  c.textBaseline='alphabetic';
  if(draw){c.fillStyle='#fff';c.fillRect(0,0,W,4000)}
  // pass 1 layout
@@ -206,7 +209,7 @@ function rcDraw(c,d,kind,draw){
  c.save();rcRR(c,G+2,G+2,W-2*G-4,H-2*G-4,40);c.clip();
  let g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,'#cfe5fb');g.addColorStop(.12,'#eef6fe');g.addColorStop(.8,'#f4f9ff');g.addColorStop(1,'#d3e7fb');c.fillStyle=g;c.fillRect(0,0,W,H);
  c.strokeStyle='rgba(110,170,230,.35)';c.lineWidth=2;for(let k=0;k<4;k++){c.beginPath();for(let x=0;x<=W;x+=10){const yy=40+k*22+Math.sin(x/W*Math.PI*2+k)*14;x?c.lineTo(x,yy):c.moveTo(x,yy)}c.stroke()}
- rcLungs(c,560,128,.5,'rgba(120,175,230,.55)',3);rcO2(c,64,196,26);rcMask(c,52,42,.8);rcConc(c,590,44,.85);
+ c.strokeStyle='rgba(47,120,198,.7)';c.lineWidth=3;c.beginPath();c.moveTo(500,70);c.lineTo(522,70);c.lineTo(530,52);c.lineTo(540,88);c.lineTo(548,64);c.lineTo(556,70);c.lineTo(578,70);c.stroke();rcLungs(c,560,128,.5,'rgba(120,175,230,.55)',3);rcO2(c,64,196,26);rcMask(c,52,42,.8);rcConc(c,590,44,.85);
  c.save();c.shadowColor='rgba(30,70,140,.25)';c.shadowBlur=24;c.shadowOffsetY=8;c.fillStyle='#fff';rcRR(c,W/2-65,34,130,130,34);c.fill();c.restore();
  if(RX.logo){const lw=106,r=RX.logo.width/RX.logo.height;let w=lw,h=lw/r;if(h>lw){h=lw;w=lw*r}c.drawImage(RX.logo,W/2-w/2,46+(106-h)/2,w,h)}
  c.textAlign='center';c.fillStyle='#0f4c9a';c.font='800 44px '+RF;c.fillText('Bharat Surgicals',W/2,226);
@@ -216,7 +219,7 @@ function rcDraw(c,d,kind,draw){
   c.fillStyle=sc.bg;rcRR(c,M,top,W-2*M,h,32);c.fill();c.strokeStyle=sc.bd;c.lineWidth=2.5;c.stroke();
   const x0=M+P,x1=M+P+IW,cy=top+48,ix=x0+22,jx=x1-22;
   const ig=c.createLinearGradient(0,cy-34,0,cy+34);ig.addColorStop(0,sc.ic[0]);ig.addColorStop(1,sc.ic[1]);c.fillStyle=ig;c.beginPath();c.arc(ix,cy,34,0,7);c.fill();rcGly(c,sc.g,ix,cy,1.15,'#fff',3);
-  rcGly(c,sc.g,jx,cy,1.05,sc.lc,2.4);
+  rcGly(c,sc.rg||sc.g,jx,cy,1.05,sc.lc,2.4);if(sc.dev)rcLungs(c,W/2,top+h/2+20,.62,'rgba(122,82,214,.16)',3);
   c.textAlign='center';c.fillStyle=sc.tc;c.font='800 32px '+RF;c.fillText(sc.t,W/2,cy+11);const tw=c.measureText(sc.t).width;
   c.fillStyle=sc.lc;c.fillRect(ix+52,cy,W/2-tw/2-14-(ix+52),2.5);c.fillRect(W/2+tw/2+14,cy,(jx-40)-(W/2+tw/2+14),2.5);
   let yy=top+92;
