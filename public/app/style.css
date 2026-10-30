@@ -445,7 +445,7 @@ html body .topbar,html body header.topbar{background:linear-gradient(135deg,var(
 .card:nth-of-type(4n+4){background:var(--rx-mint)!important;border-color:var(--rx-mint-b)!important}
 .section-title{color:#0f4c9a!important}
 .section-title::after{content:"";flex:1;height:2.5px;border-radius:2px;background:linear-gradient(90deg,#2f6fd0,rgba(47,111,208,0))}
-.modal-head{background:linear-gradient(135deg,var(--rx-blue),var(--rx-navy))!important}
+html body .modal-head,html body .pop-card .modal-head{background:linear-gradient(135deg,var(--rx-blue),var(--rx-navy))!important}
 .modal-card{background:linear-gradient(180deg,#eef6fe 0%,#fff 40%)!important}
 .primary-btn{background:linear-gradient(135deg,var(--rx-blue),var(--rx-navy))!important;border-color:transparent!important}
 .total-bar{background:linear-gradient(135deg,var(--rx-blue),var(--rx-navy))!important;color:#fff!important}
