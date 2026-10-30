@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 160" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path d="M10 40h30l10-22 14 44 10-30 8 8h30" stroke="#2f78c6" stroke-width="3" opacity=".55"/>
+<g stroke="#5b9be0" stroke-width="3" opacity=".5" transform="translate(150 60) scale(.7)"><path d="M8-28C50-34 72 20 64 62 60 82 30 80 12 62 4 50 6 0 8-28ZM-8-28C-50-34-72 20-64 62-60 82-30 80-12 62-4 50-6 0-8-28ZM0-62V-8L-14 10M0-8 14 10"/></g>
+<g transform="translate(40 112)"><circle r="22" fill="#fff" fill-opacity=".7" stroke="#8dc0ee" stroke-width="3"/><text x="-4" y="7" font-family="sans-serif" font-weight="800" font-size="20" fill="#2f78c6" text-anchor="middle">O</text><text x="8" y="12" font-family="sans-serif" font-weight="800" font-size="11" fill="#2f78c6">2</text></g>
+</svg>
