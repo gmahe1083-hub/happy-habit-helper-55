@@ -430,6 +430,9 @@ body #modalBody,body #mb{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-over
 /* v37 greeting */
 #greet{font-size:12px;font-weight:600;color:#d9f3f0;line-height:1.1;margin-top:2px;white-space:nowrap}.topbar h1{line-height:1.15}
 
+/* v39 bottom room above floating menu */
+#view{padding-bottom:135px!important}#mb{padding-bottom:130px!important}
+
 /* Preserve the complete logo and lettering in every header. */
 .brand-logo{width:48px;height:48px;flex:0 0 48px;object-fit:contain;object-position:center;padding:2px;border-radius:8px;background:var(--card)}
 

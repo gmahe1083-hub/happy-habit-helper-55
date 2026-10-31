@@ -19,7 +19,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <iframe
-      src="/app/index.html"
+      src="/app/tracker.html"
       title="Bharat Surgicals Tracker"
       style={{ position: "fixed", inset: 0, width: "100%", height: "100%", border: 0 }}
     />

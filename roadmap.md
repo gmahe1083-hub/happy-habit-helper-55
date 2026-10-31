@@ -36,4 +36,5 @@
 - [x] Merge v34 (bottom menu, month line) keeping Settings & Backup, cloud sync, full logo
 - [x] Merge v35 (floating menu on all screens, Sold button) keeping Settings & Backup, cloud sync, full logo
 
-- [ ] Merge v38 receipt artwork and receipt shortcuts, preserving Settings & Backup, cloud backup, shared updates, receipt theme, smooth transitions and full logos; verify downloads and navigation
+- [x] Merge v38 receipt artwork and receipt shortcuts, preserving Settings & Backup, cloud backup, shared updates, receipt theme, smooth transitions and full logos (receipt download check still pending)
+- [x] Merge v39 (grouped Customers screen, refreshed expenses views), preserving Settings & Backup, cloud backup, shared updates, receipt theme, smooth transitions and full logo; fixed duplicate-function bugs in the upload and the preview's index.html redirect

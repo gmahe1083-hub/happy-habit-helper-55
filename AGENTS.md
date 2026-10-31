@@ -13,6 +13,7 @@
 
 - The tracker app is the original vanilla HTML/JS in `public/app/`; keep business logic there unchanged. Why: PRD requires identical numbers and wrapping, not a rewrite.
 - `public/app/` is Capacitor's `webDir`; the `/` route only iframes it for web preview. Why: one source for web and APK.
+- The web iframe loads `/app/tracker.html`, an exact copy of `public/app/index.html`; the dev server redirects any `index.html` URL to its folder, which the router then 404s. Why: Capacitor requires `index.html` at the webDir root, so every merge that rewrites `index.html` must copy it to `tracker.html` too.
 - All Android-native behaviour (exports, back button, maps, PDFs) lives in `public/app/native-bridge.js` and is a no-op in browsers. Why: keeps tracker code untouched.
 - Tracker iframes get the bridge via `parent.NB.install(window)` prepended to the `pre` script in `trackers.js`. Why: iframes have their own window prototypes.
 - Tracker data keys are served from memory and persisted to IndexedDB by `public/app/storage.js`, which patches `Storage.prototype` per window and loads the tracker scripts only after data is loaded. Why: removes the localStorage size limit without touching tracker logic.
