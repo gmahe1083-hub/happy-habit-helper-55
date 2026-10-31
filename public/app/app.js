@@ -15,7 +15,7 @@ const showErr=e=>{$('shell').style.display='block';document.querySelectorAll('.t
 const fresh=()=>{S.reconcile();return Promise.all([load('device'),load('rental')])};
 const freshOne=k=>{S.reconcile();return load(k)};
 let dir=1;
-function render(){window.scrollTo(0,0);const vw=$('view');vw.classList.remove('pf','pb');void vw.offsetWidth;vw.classList.add(dir>0?'pf':'pb');$('shell').style.display='block';document.querySelectorAll('.trk').forEach(f=>f.classList.remove('on'));$('title').textContent=T[cur.p];if(cur.p==='main')navOn(0);$('back').style.visibility=cur.p==='main'?'hidden':'visible';({main:vMain,customers:vCust,customer:vCustD,reports:vRep,expenses:vExp,custlist:vCustL,expl:vExpL})[cur.p]()}
+function render(){ens();window.scrollTo(0,0);const vw=$('view');vw.classList.remove('pf','pb');void vw.offsetWidth;vw.classList.add(dir>0?'pf':'pb');$('shell').style.display='block';document.querySelectorAll('.trk').forEach(f=>f.classList.remove('on'));$('title').textContent=T[cur.p];if(cur.p==='main')navOn(0);$('back').style.visibility=cur.p==='main'?'hidden':'visible';({main:vMain,customers:vCust,customer:vCustD,reports:vRep,expenses:vExp,custlist:vCustL,expl:vExpL})[cur.p]()}
 function go(p,arg){dir=1;ens();stack.push(cur);cur={p,arg};render()}
 let busy=false;
 window.bharatSyncIdle=()=>!busy&&cur.p!=='t'&&$("sheet").classList.contains("hidden")&&!document.getElementById("lockscreen")&&!document.body.classList.contains("loading");
@@ -23,9 +23,15 @@ async function openIn(k,code,page){if(busy)return;busy=true;ens();stack.push(cur
 function back(){if(!$('sheet').classList.contains('hidden')){sheetBack();return true}
  if(cur.p==='t'){const w=$('f_'+cur.k).contentWindow;if(w.__shellBack&&w.__shellBack())return true}
  if(stack.length){dir=-1;cur=stack.pop();if(cur.p==='t'){if(cur.fresh){cur.fresh=0;const kk=cur.k;freshOne(kk).then(()=>{if(cur.p==='t'&&cur.k===kk)showTrk(kk)})}else showTrk(cur.k)}else render();if(cur.reopen){const k=cur.reopen;cur.reopen=null;if(k==='expenses')setTimeout(()=>exp(cur.rarg),0)}return true}return false}
-function showTrk(k){document.querySelectorAll('.trk').forEach(f=>f.classList.remove('on'));$('shell').style.display='none';$('f_'+k).classList.add('on')}
+function showTrk(k){ens();document.querySelectorAll('.trk').forEach(f=>f.classList.remove('on'));$('shell').style.display='none';$('f_'+k).classList.add('on')}
 function main(){stack=[];cur={p:'main'};render()}
-function ens(){if(history.state&&history.state.s===0)history.pushState({s:1},'')}
+/* ===== v40 system back / gesture: base entry + ONE guard entry whenever the app is away from Main ===== */
+const atRoot=()=>cur.p==='main'&&!stack.length&&$('sheet').classList.contains('hidden');
+let hIgn=0,hBusy=0;
+function sync(){const b=history.state&&history.state.b;
+ if(!atRoot()){if(b!==1&&!hBusy)history.pushState({b:1},'')}
+ else if(b===1&&!hBusy){hIgn++;hBusy=1;history.back();setTimeout(()=>{hBusy=0;sync()},150)}}
+function ens(){setTimeout(sync,0);setTimeout(sync,150)}
 function addMenu(){$('mt').textContent='Add';$('mb').innerHTML=[['device','📦 ADD DEVICE'],['mask','😷 ADD MASK'],['supplier','🏢 ADD SUPPLIER'],['customer','👥 ADD CUSTOMER']].map(([a,b])=>`<button class="${a==='device'?'primary-btn':'secondary-btn'}" style="width:100%;margin-bottom:10px" onclick="Shell.add('${a}')">${b}</button>`).join('');$('sheet').classList.remove('hidden')}
 function add(k){closeSheet();({device:()=>openIn('device','openPurchase()'),mask:()=>openIn('device','openMaskForm()'),supplier:()=>openIn('device','openSupplierForm()'),customer:()=>openIn('rental','openCustomerForm()')})[k]()}
 function rep(k){const sc=c=>`navigate('reports');historyStack.length=0;setTimeout(()=>document.querySelector('${c}').scrollIntoView(),80)`;
@@ -62,8 +68,12 @@ function vRep(){const _h='<button class="dl-all" onclick="Shell.dlAll()">⬇ DOW
 window.Shell={dlAll,exp,expSub,sheetBack,expOpen,back,main,ens,go,addMenu,closeSheet,add,rep,dev:(c,p)=>openIn('device',c,p),ren:(c,p)=>openIn('rental',c,p),rentOut:id=>{S.reconcile();const e=S.eqOf(id);if(!e)return alert('Could not prepare this device for rental.');cur.fresh=1;openIn('rental',"openCheckout('"+e+"')")},dev2:c=>openIn('rental',c),ren2:c=>openIn('rental',c),tracker:k=>openIn(k,'',1),
  filt:q=>{q=q.toLowerCase();document.querySelectorAll('#cl .card').forEach(x=>x.style.display=(x.dataset.search||'').includes(q)?'block':'none')},
  edit:id=>openIn('rental',`openCustomerEdit('${id}')`),enable:id=>{S.setStatus(id,'available');render()}};
-history.replaceState({s:0},'');history.pushState({s:1},'');
-addEventListener('popstate',()=>{if(back())history.pushState({s:1},'')});
+history.replaceState({b:0},'');
+addEventListener('popstate',()=>{if(hIgn>0){hIgn--;return}
+ if(history.state&&history.state.b===1){sync();return}
+ if(!atRoot()){if(!back())main()}
+ sync();setTimeout(sync,60);setTimeout(sync,200)});
+setInterval(sync,200);
 /* ===== v5 hubs (shell) ===== */
 T.custlist='Customers';T.expl='Expenses';
 const hIco=e=>'<span class="hub-ico">'+e+'</span>';
