@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0f968d"><title>Bharat Surgicals - Device &amp; Rental Tracker</title><link rel="icon" href="/favicon.png" type="image/png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/manifest.webmanifest"><link rel="stylesheet" href="style.css"></head>
-<body><div id="splash"><div id="spbar"><i></i></div></div>
-<script>(function(){var sp=document.getElementById('splash'),bar=document.getElementById('spbar');if(!sp)return;var IW=1536,IH=2752;
-function lay(){var vw=innerWidth,vh=innerHeight,s=Math.min(vw/IW,vh/IH),ox=(vw-IW*s)/2,oy=(vh-IH*s)/2;bar.style.left=(ox+98*s)+'px';bar.style.top=(oy+2260*s)+'px';bar.style.width=(1330*s)+'px';bar.style.height=(34*s)+'px'}
-lay();addEventListener('resize',lay);var done=0;function hide(){if(done)return;done=1;sp.classList.add('out');setTimeout(function(){if(sp.parentNode)sp.parentNode.removeChild(sp)},600)}
-sp.addEventListener('click',hide);setTimeout(hide,2900)})();</script>
+<body><div id="splash"></div>
+<script>(function(){var sp=document.getElementById('splash');if(!sp)return;var done=0;function hide(){if(done)return;done=1;sp.classList.add('out');setTimeout(function(){if(sp.parentNode)sp.parentNode.removeChild(sp)},600)}
+sp.addEventListener('click',hide);setTimeout(hide,3000)})();</script>
 
 <div id="shell"><header class="topbar"><button class="icon-btn" id="back" onclick="Shell.back()">‹</button><div class="brand-title"><h1 id="title">Main Dashboard</h1><div id="greet"></div></div><img class="brand-logo" src="bharat-logo.png" alt="Bharat Surgicals"></header><main id="view" class="app"></main></div>
 <iframe id="f_device" class="trk"></iframe><iframe id="f_rental" class="trk"></iframe>
