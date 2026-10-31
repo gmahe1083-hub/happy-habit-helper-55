@@ -438,6 +438,10 @@ body #modalBody,body #mb{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-over
 #splash.out{opacity:0;pointer-events:none}
 @keyframes spIn{from{opacity:0;transform:scale(1.035)}to{opacity:1;transform:none}}
 
+/* v45 tagline box: just below the header + same box at the bottom */
+#view::before,#view::after,#mb::before,#mb::after{content:"Let\2019 s Make Money, Memories, and Millions";display:block;width:fit-content;max-width:100%;margin-left:auto;margin-right:auto;text-align:center;font-size:11.5px;font-weight:700;font-style:italic;color:#4527a0;background:linear-gradient(135deg,#f3eeff,#e4dbff);border:1px solid #cbbcf5;border-radius:999px;padding:7px 18px;box-shadow:0 3px 10px -4px rgba(91,63,208,.35);text-shadow:none;letter-spacing:.2px}
+#view::before,#mb::before{margin-bottom:12px;margin-top:0}
+#view::after,#mb::after{margin-top:22px}
 /* Preserve the complete logo and lettering in every header. */
 .brand-logo{width:48px;height:48px;flex:0 0 48px;object-fit:contain;object-position:center;padding:2px;border-radius:8px;background:var(--card)}
 
