@@ -25,12 +25,20 @@ function back(){if(!$('sheet').classList.contains('hidden')){sheetBack();return 
  if(stack.length){dir=-1;cur=stack.pop();if(cur.p==='t'){if(cur.fresh){cur.fresh=0;const kk=cur.k;freshOne(kk).then(()=>{if(cur.p==='t'&&cur.k===kk)showTrk(kk)})}else showTrk(cur.k)}else render();if(cur.reopen){const k=cur.reopen;cur.reopen=null;if(k==='expenses')setTimeout(()=>exp(cur.rarg),0)}return true}return false}
 function showTrk(k){ens();document.querySelectorAll('.trk').forEach(f=>f.classList.remove('on'));$('shell').style.display='none';$('f_'+k).classList.add('on')}
 function main(){stack=[];cur={p:'main'};render()}
-/* ===== v40 system back / gesture: base entry + ONE guard entry whenever the app is away from Main ===== */
+/* ===== v43 system back / gesture =====
+   Base entry + ONE guard entry while away from Main. The guard is only ever CREATED inside a real tap
+   (Chrome skips history entries that a page adds without user activation, which made the 2nd Back exit the app).
+   After a system Back the guard is brought back with history.forward() (a traversal, never a new entry). */
 const atRoot=()=>cur.p==='main'&&!stack.length&&$('sheet').classList.contains('hidden');
-let hIgn=0,hBusy=0;
+let hIgn=0,hBusy=0,fwdOK=0,lastB=0;
+const actNow=()=>{try{return navigator.userActivation?navigator.userActivation.isActive:true}catch(e){return true}};
+function hTrav(fn){hIgn++;hBusy=1;fn();setTimeout(()=>{hBusy=0;sync()},220)}
 function sync(){const b=history.state&&history.state.b;
- if(!atRoot()){if(b!==1&&!hBusy)history.pushState({b:1},'')}
- else if(b===1&&!hBusy){hIgn++;hBusy=1;history.back();setTimeout(()=>{hBusy=0;sync()},150)}}
+ if(!atRoot()){
+  if(b!==1&&!hBusy){
+   if(fwdOK){fwdOK=0;lastB=1;hTrav(()=>history.forward())}
+   else if(actNow()){history.pushState({b:1},'');lastB=1;fwdOK=0}}}
+ else if(b===1&&!hBusy){fwdOK=1;lastB=0;hTrav(()=>history.back())}}
 function ens(){setTimeout(sync,0);setTimeout(sync,150)}
 function addMenu(){$('mt').textContent='Add';$('mb').innerHTML=[['device','📦 ADD DEVICE'],['mask','😷 ADD MASK'],['supplier','🏢 ADD SUPPLIER'],['customer','👥 ADD CUSTOMER']].map(([a,b])=>`<button class="${a==='device'?'primary-btn':'secondary-btn'}" style="width:100%;margin-bottom:10px" onclick="Shell.add('${a}')">${b}</button>`).join('');$('sheet').classList.remove('hidden')}
 function add(k){closeSheet();({device:()=>openIn('device','openPurchase()'),mask:()=>openIn('device','openMaskForm()'),supplier:()=>openIn('device','openSupplierForm()'),customer:()=>openIn('rental','openCustomerForm()')})[k]()}
@@ -69,10 +77,13 @@ window.Shell={dlAll,exp,expSub,sheetBack,expOpen,back,main,ens,go,addMenu,closeS
  filt:q=>{q=q.toLowerCase();document.querySelectorAll('#cl .card').forEach(x=>x.style.display=(x.dataset.search||'').includes(q)?'block':'none')},
  edit:id=>openIn('rental',`openCustomerEdit('${id}')`),enable:id=>{S.setStatus(id,'available');render()}};
 history.replaceState({b:0},'');
-addEventListener('popstate',()=>{if(hIgn>0){hIgn--;return}
- if(history.state&&history.state.b===1){sync();return}
+addEventListener('popstate',()=>{const b=history.state&&history.state.b;
+ if(hIgn>0){hIgn--;lastB=b===1?1:0;return}
+ if(b===1){lastB=1;sync();return}
+ if(lastB===1)fwdOK=1;lastB=0;
  if(!atRoot()){if(!back())main()}
  sync();setTimeout(sync,60);setTimeout(sync,200)});
+document.addEventListener('click',ens,true);
 setInterval(sync,200);
 /* ===== v5 hubs (shell) ===== */
 T.custlist='Customers';T.expl='Expenses';
