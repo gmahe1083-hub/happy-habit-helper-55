@@ -139,7 +139,7 @@ async function dlAll(){
   ...sec('PURCHASED DEVICES',['Date','Device','Type','Serial','Supplier','Purchased/Lent','Purchase Value','Payment','Status'],dev.p,['','','','','','Total',sum(dev.p,6)]),
   ...sec('SOLD DEVICES',['Sell Date','Device','Type','Serial','Customer','Phone','Device Price','Mask','Mask Qty','Mask Price','Vendor Expense','Other Expense','Net Sold','Received Type'],dev.s,['','','','','','Total','','','','','','',sum(dev.s,12)]),
   ...sec('MASK STOCK',['Mask','Type','Vendor','Date','Unit Price','Available Qty','Sold Qty'],dev.m),
-  ...sec('MASK SALES (DIRECT + AGAINST RENTALS)',['Date','Mask','Qty','Price','Sold Against'],ms.map(x=>[fmt(x.date),x.maskName||'',x.qty||0,x.price||0,x.rentalId?'Rental':'Direct']),['','Total','','',sum(ms.map(x=>[0,0,0,x.price]),3)]),
+  ...sec('MASK SALES (DIRECT + AGAINST RENTALS)',['Date','Mask','Qty','Price','Sold Against'],ms.map(x=>[fmt(x.date),x.maskName||'',x.qty||0,S.saleValue(x)||0,x.rentalId?'Rental':'Direct']),['','Total','','',sum(ms.map(x=>[0,0,0,S.saleValue(x)]),3)]),
   ...sec('RENTALS',['Customer','Device','Serial','Start','Status','Checked In','Monthly Rent','Mask / Extra','Expense','Paid (all time)','Due Now','Notes'],ren.r),
   ...sec('RENTAL PAYMENTS',['Date','Customer','Device','Amount','Method','Period From','Period To'],ren.p,['','','Total',sum(ren.p,3)]),
   ...sec('MASK / EXTRA ON RENTALS',['Customer','Device','Start','Mask / Extra'],ren.r.filter(x=>Number(x[7])>0).map(x=>[x[0],x[1],x[3],x[7]])),

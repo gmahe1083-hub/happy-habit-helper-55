@@ -13,7 +13,7 @@ function fixture(purchasedType = 'purchased', active = false, accepted = true) {
   const root = {} as { assignBackToSale?: (id: string) => void };
   runInNewContext(extension.slice(begin), {
     window: root, device: () => item, Shared: { eqHist: () => active ? [{ status: 'active' }] : [], reconcile: vi.fn() },
-    alert: vi.fn(), confirm: () => accepted, save, closeModal: vi.fn(), render: vi.fn(),
+    alert: vi.fn(), confirm: () => accepted, save, closeModal: vi.fn(), render: vi.fn(), openModal: vi.fn(),
   });
   root.assignBackToSale?.('d1');
   return { item, save };
