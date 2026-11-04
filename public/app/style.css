@@ -475,4 +475,4 @@ body .modal:not(.hidden) .modal-card,body .modal:not(.hidden) .modal-card.pgf,bo
 #mapToast{transition-property:transform,opacity}
 @media(prefers-reduced-motion:reduce){#view.pf,#view.pb,.trk.on,body .modal:not(.hidden) .modal-card,body .modal:not(.hidden) .modal-card.pgf,body .modal:not(.hidden) .modal-card.pgb{animation:none!important}.pop-card{transition:none!important}}
 
-html,body{max-width:100%;overflow-x:hidden;overscroll-behavior-x:none}#shell,.fnav{max-width:100vw}img,canvas{max-width:100%}
+html,body{max-width:100%;overflow-x:clip;overscroll-behavior-x:none}#shell,.fnav{max-width:100vw}img,canvas{max-width:100%}
