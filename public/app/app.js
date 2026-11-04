@@ -209,7 +209,7 @@ function rcDraw(c,d,kind,draw){
  if(d.sale)secs.push({t:'Sale',i:0,bg:'#feefdc',bd:'#f7ad74',tc:'#d65f0a',lc:'#ec8a22',lb:'#6f4217',h0:82,rows:[['Sale date',rcD(d.start)],['Received',d.receivedType],['Notes',d.notes]].filter(x=>x[1])});else secs.push({t:'Rental',i:0,bg:'#feefdc',bd:'#f7ad74',tc:'#d65f0a',lc:'#ec8a22',lb:'#6f4217',rental:true,rows:rentalRows,h0:255});
  secs.push({t:'Customer',i:1,bg:'#e5f0fd',bd:'#9ccaf6',tc:'#1456c0',lc:'#2a62cc',lb:'#3e66a3',h0:82,rows:(full?[['Name',d.customer.name],['Phone',d.customer.phone],['Address',d.customer.address],['Notes',d.customer.notes]]:[['Name',d.customer.name],['Address',d.customer.address]]).filter(x=>x[1])});
  secs.push({t:'Device',i:2,bg:'#eeebfd',bd:'#b9a2f8',tc:'#5a22c8',lc:'#6a3fd6',lb:'#5d49a8',h0:82,mark:true,rows:[['Name',d.device.name],['Type',d.device.type],['Serial number',d.device.serial]].concat(full?[['Notes',d.device.notes]]:[]).filter(x=>x[1])});
- const pr=[[d.sale?'Device price':'Rent',rcM(rent)],[d.sale?'Mask':'Mask / Extra',rcM(mask)]];if(d.maskType)pr.push(['Mask type',d.maskType]);if(full&&!d.sale)pr.push(['Expense',rcM(exp)]);if(d.sale&&full){pr.length=0;pr.push(['Device sale price',rcM(rent)],['Mask price',rcM(mask)]);if(d.maskType)pr.push(['Mask type',d.maskType]);pr.push(['Vendor expense',rcM(d.vendor||0)],['Other expense',rcM(d.other||0)],['Net received',rcM(rent+mask-exp),'hl'],['Total paid',rcM(rent+mask)])}else pr.push(['Total paid',rcM(d.sale?rent+mask:paid),'hl']);if(!d.sale)pr.push(['Balance due',rcM(d.bal)]);
+ const pr=[[d.sale?'Device price':'Rent',rcM(rent)],[d.sale?'Mask':'Mask / Extra',rcM(mask)]];if(d.maskType)pr.push(['Mask type',d.maskType]);if(full&&!d.sale)pr.push(['Expense',rcM(exp)]);if(d.sale&&full){pr.length=0;pr.push(['Device sale price',rcM(rent)],['Mask price',rcM(mask)]);if(d.maskType)pr.push(['Mask type',d.maskType]);pr.push(['Vendor expense',rcM(d.vendor||0),'red'],['Other expense',rcM(d.other||0),'red'],['Total received',rcM(rent+mask)],['Net received',rcM(rent),'hl'])}else pr.push(['Total paid',rcM(d.sale?rent+mask:paid),'hl']);if(!d.sale)pr.push(['Balance due',rcM(d.bal)]);
  secs.push({t:'Payment',i:3,bg:'#e4f7e7',bd:'#98d3ad',tc:'#0b6b22',lc:'#1f8a3a',lb:'#3d6b4c',h0:95,rows:pr,lines:true});
  c.textBaseline='alphabetic';
  let y=321;const lay=[];
@@ -244,15 +244,15 @@ function rcDraw(c,d,kind,draw){
    if(act){c.fillStyle='#fff';c.beginPath();c.arc(L+fw,by+bh/2,15,0,7);c.fill();c.strokeStyle='#f08a2a';c.lineWidth=6;c.stroke()}
    c.fillStyle=sc.lb;c.font='500 25px '+RF;c.textAlign='center';c.fillText(lab,Math.max(L+115,Math.min(R-115,L+fw)),top+241)}
   prep.forEach((p,i)=>{const hl=p.r[2],bl=yy+(hl?39:36);
-   if(hl){c.fillStyle='#c9ecd2';rcRR(c,X0+12,yy+2,X1-X0-24,53,20);c.fill()}
-   c.textAlign='left';c.fillStyle=hl?'#0b5a22':sc.lb;c.font=(hl?'800 29px ':'500 27px ')+RF;c.fillText(p.r[0],hl?L+4:L,bl);
-   c.textAlign='right';c.fillStyle=hl?'#0b5a22':'#141a28';c.font='700 28px '+RF;p.ls.forEach((l,k)=>c.fillText(l,hl?R-6:R,bl+k*34));
+   const rd=hl==='red';if(hl){c.fillStyle=rd?'#fde0e0':'#c9ecd2';rcRR(c,X0+12,yy+2,X1-X0-24,53,20);c.fill()}
+   c.textAlign='left';c.fillStyle=rd?'#b42318':hl?'#0b5a22':sc.lb;c.font=(rd?'600 27px ':hl?'800 29px ':'500 27px ')+RF;c.fillText(p.r[0],hl?L+4:L,bl);
+   c.textAlign='right';c.fillStyle=rd?'#b42318':hl?'#0b5a22':'#141a28';c.font='700 28px '+RF;p.ls.forEach((l,k)=>c.fillText(l,hl?R-6:R,bl+k*34));
    if(sc.lines&&i<prep.length-1&&!hl&&!(prep[i+1]&&prep[i+1].r[2])){c.fillStyle='rgba(60,120,90,.22)';c.fillRect(L-4,yy+p.h-2,R-L+8,1.5)}
    yy+=p.h})});
  let g=c.createLinearGradient(X0,0,X1,0);g.addColorStop(0,'#0a68cc');g.addColorStop(1,'#0a3d8a');c.save();c.shadowColor='rgba(11,63,140,.3)';c.shadowBlur=14;c.shadowOffsetY=5;c.fillStyle=g;rcRR(c,X0,barY,X1-X0,barH,30);c.fill();c.restore();
  c.textAlign='left';c.fillStyle='rgba(255,255,255,.92)';c.font='600 28px '+RF;if(c.letterSpacing!==undefined)c.letterSpacing='4px';c.fillText(d.sale?(full?'NET RECEIVED':'TOTAL PAID'):'CURRENT RENT',83,barY+60);if(c.letterSpacing!==undefined)c.letterSpacing='0px';
  c.fillStyle='rgba(255,255,255,.4)';c.fillRect(423,barY+22,2,barH-44);
- c.textAlign='right';c.fillStyle='#fff';c.font='800 64px '+RF;c.fillText(rcM(d.sale?(full?rent+mask-exp:rent+mask):rent),770,barY+70);
+ c.textAlign='right';c.fillStyle='#fff';c.font='800 64px '+RF;c.fillText(rcM(d.sale?(full?rent:rent+mask):rent),770,barY+70);
  return H}
 
 async function rcBuild(d,kind){await rcLogo();await rcAssets();const S2=2,W=846;const m=document.createElement('canvas').getContext('2d');const H=rcDraw(m,d,kind,false);const cv=document.createElement('canvas');cv.width=W*S2;cv.height=Math.ceil(H)*S2;const c=cv.getContext('2d');c.scale(S2,S2);rcDraw(c,d,kind,true);RX.canvas=cv;return cv}
