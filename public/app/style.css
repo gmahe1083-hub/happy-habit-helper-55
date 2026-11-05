@@ -793,3 +793,4 @@ body::before{opacity:.45!important}
 .dashboard-home .dashboard-main .stat:nth-child(8) .sub span:nth-child(2){color:#0e7490!important}
 .dashboard-home .dashboard-main .stat:nth-child(8) .sub span:nth-child(3){color:#9f1239!important}
 .dashboard-home .dashboard-main .stat:nth-child(8) .sub span:nth-child(4){color:#4338ca!important}
+.dashboard-home .dashboard-main .stat .sub{gap:3px!important;padding:4px!important}.dashboard-home .dashboard-main .stat .sub span{font-size:10.5px!important;padding:3px 4px!important;letter-spacing:-.1px}
