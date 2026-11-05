@@ -607,3 +607,4 @@ html,body{max-width:100%;overflow-x:clip;overscroll-behavior-x:none}#shell,.fnav
 .dashboard-home .monthbar.mb3 .mb-m{font-size:13.5px;padding-right:8px}
 .dashboard-home .monthbar.mb3 .mb-r{font-size:17px!important;padding:3px 10px}
 .dashboard-home .monthbar.mb3 .mb-d{margin-left:0;font-size:11px;padding:3px 8px}
+.dashboard-main .stat .sub span{white-space:normal}
