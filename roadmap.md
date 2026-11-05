@@ -1,5 +1,5 @@
 # Roadmap
-- [ ] Apply uploaded dashboard/header styling, separate outstanding and rental values, and sold-device price/location displays; verify on phone and desktop.
+- [x] Apply uploaded dashboard/header styling, separate outstanding and rental values, and sold-device price/location displays; verified phone/desktop, notes saving, informational top lines and sale details; 20 tests passed.
 
 - [x] Enable notes in sold-device editing; verified saved notes, contact details and prices refresh immediately and survive reopening
 
