@@ -482,3 +482,5 @@ html,body{max-width:100%;overflow-x:clip;overscroll-behavior-x:none}#shell,.fnav
 .gn-act{display:flex;gap:8px;margin:8px 0}.gn-act button,.gn-m button{border:0;border-radius:8px;padding:6px 12px;font-weight:700;background:#1e5aa8;color:#fff}
 .gn-act .gn-cancel{background:#e6eef9;color:#1e5aa8}.gn-item{border-top:1px solid #e6eef9;padding:8px 0}.gn-t{white-space:normal;word-break:break-word}
 .gn-m{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#6b7c93;margin-top:4px}.gn-m span{display:flex;gap:6px}.gn-m .gn-del{background:#d64545}
+
+.monthbar.mb3{background:#e7f8ef;border-color:#a7e3c4}.monthbar.mb3 .mb-m{color:#0b6b46}.monthbar.mb3 .mb-r{color:#1456c0;font-size:15px}.monthbar.mb3 .mb-d{color:#64748b;font-weight:600}
