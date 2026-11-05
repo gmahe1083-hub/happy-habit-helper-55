@@ -797,3 +797,4 @@ body::before{opacity:.45!important}
 
 /* v61: max two details per line; long ones drop to own line; soft shadow per detail. */
 .dashboard-home .dashboard-main .stat .sub span{flex:1 1 40%!important;max-width:100%;box-shadow:0 1px 3px rgba(15,40,80,.18),0 1px 1px rgba(15,40,80,.08)!important;background:rgba(255,255,255,.55)!important}
+.dashboard-home .dashboard-main .stat .sub span{min-width:max-content!important;overflow:visible!important}
