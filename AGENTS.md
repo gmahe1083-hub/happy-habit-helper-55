@@ -25,3 +25,4 @@
 - Keep screen-motion overrides at the end of shell and embedded tracker styles, using shared duration/easing variables and a final reduced-motion override. Why: uploaded CSS must not reintroduce conflicting animations or accessibility regressions.
 
 - Receipt artwork is packaged as the uploaded browser-safe `public/app/rcassets.js` and loaded before receipt rendering. Why: images and PDFs must match the supplied design and work offline in Android.
+- Sold-entry edits update the linked device customer before saving. Why: live customer refresh must not overwrite edited sale contact details.
