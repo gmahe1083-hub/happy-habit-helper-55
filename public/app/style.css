@@ -494,3 +494,39 @@ html,body{max-width:100%;overflow-x:clip;overscroll-behavior-x:none}#shell,.fnav
 .monthbar.mb2{background:linear-gradient(135deg,#e3f0ff,#c9e1ff);border-color:#93c0f5}.monthbar.mb2 .mb-m{color:#0b3d91}.monthbar.mb2 .mb-r{color:#1d4ed8}.monthbar.mb2 .mb-d{color:#7c3aed}
 .monthbar.mb3{background:linear-gradient(135deg,#e0f7ec,#bfeed6);border-color:#86d9b0}.monthbar.mb3 .mb-m{color:#065f46}.monthbar.mb3 .mb-r{color:#0b3d91;font-size:16px}.monthbar.mb3 .mb-d{color:#475569;font-weight:700}
 .gn-head .gn-addbtn{margin-left:auto}
+
+/* Dashboard presentation: quiet icons, readable values and medical header. */
+:root{--dash-ink:#073e96;--dash-teal:#087a73;--dash-violet:#6330a6;--dash-rose:#ac224c;--dash-ochre:#946000;--dash-paper:#fff;--dash-header-art:url("dashboard-header.jpg");--dash-header-shadow:0 4px 16px color-mix(in srgb,var(--rx-blue) 20%,transparent)}
+.dashboard-home .topbar{background:var(--dash-header-art) center/100% 100% no-repeat!important;color:var(--dash-ink);min-height:104px!important;padding-bottom:16px;border-bottom:1px solid var(--rx-sky-b);box-shadow:var(--dash-header-shadow)!important}
+.dashboard-home .topbar h1{color:var(--dash-ink);text-shadow:none;font-size:24px;white-space:normal;line-height:1.15}
+.dashboard-home .brand-title{max-width:60%;margin-right:auto}
+.dashboard-home #greet{color:var(--dash-ink);font-size:14px;margin-top:5px}
+.dashboard-home .brand-logo{width:66px;height:66px;flex-basis:66px;background:var(--dash-paper);margin:0;border-radius:8px}
+.dashboard-home #back{display:none}
+.dashboard-main .stat::before{position:absolute;right:8px;bottom:4px;top:auto;margin:0;opacity:.1;background:transparent!important;box-shadow:none!important;pointer-events:none}
+.dashboard-main .stat::after{display:none}
+.dashboard-main .stat{background:var(--rx-sky)!important;border:1px solid var(--rx-sky-b)!important;border-radius:16px!important;--dash-title:var(--dash-ink);padding:16px 10px!important}
+.dashboard-main .stat:nth-child(4n+1){background:var(--rx-mint)!important;--dash-title:var(--dash-teal)}
+.dashboard-main .stat:nth-child(4n+2){background:var(--rx-violet)!important;--dash-title:var(--dash-violet)}
+.dashboard-main .stat:nth-child(4n){background:var(--rx-amber)!important;--dash-title:var(--dash-ochre)}
+.dashboard-main .stat:nth-child(3),.dashboard-main .stat:nth-child(7){background:var(--rx-sky)!important}
+.dashboard-main .stat:nth-child(6){--dash-title:var(--dash-rose)}
+.dashboard-main .stat .num{color:var(--dash-title)!important;text-shadow:none;overflow-wrap:anywhere;font-size:26px}
+.dashboard-main .stat .label{color:var(--dash-title)!important;font-size:14px;line-height:1.3;font-weight:800}
+.dashboard-main .stat .sub{color:var(--text);opacity:1;padding:0;width:100%;font-size:11px}
+.dashboard-main .stat .sub span{display:block;white-space:normal;overflow-wrap:anywhere;margin:3px 0}
+.dashboard-home .section-title::before{display:none}
+.dashboard-home .section-title{color:var(--dash-teal)!important}
+.dashboard-home .section-title:nth-of-type(2){color:var(--dash-violet)!important}
+.dashboard-home .section-title:nth-of-type(3){color:var(--dash-rose)!important}
+.dashboard-home .quick .qi{position:absolute;right:8px;bottom:6px;opacity:.12;pointer-events:none}
+.dashboard-home .quick button{position:relative;min-height:62px}
+.monthbar{cursor:default;flex-wrap:wrap;letter-spacing:0}
+.gnotes{background:transparent;box-shadow:none;padding:0}
+.gn-item{padding:12px;margin:8px 0;border:1px solid var(--rx-sky-b);border-left:4px solid var(--rx-blue);border-radius:8px;background:var(--rx-sky)}
+.gn-item:nth-child(3n+2){background:var(--rx-amber);border-color:var(--rx-amber-b);border-left-color:var(--dash-ochre)}
+.gn-item:nth-child(3n){background:var(--rx-mint);border-color:var(--rx-mint-b);border-left-color:var(--dash-teal)}
+.gn-t{color:var(--dash-ink);line-height:1.5}
+.dashboard-home .gn-head::after{display:none}
+.dashboard-home .gn-head>span{flex:1}
+@media(max-width:420px){.dashboard-home .topbar h1{font-size:21px}.dashboard-home .brand-title{max-width:65%}.dashboard-home .brand-logo{width:56px;height:56px;flex-basis:56px}.dashboard-main .stat .num{font-size:23px}}

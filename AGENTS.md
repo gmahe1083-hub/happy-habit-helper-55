@@ -26,3 +26,4 @@
 
 - Receipt artwork is packaged as the uploaded browser-safe `public/app/rcassets.js` and loaded before receipt rendering. Why: images and PDFs must match the supplied design and work offline in Android.
 - Sold-entry edits update the linked device customer before saving. Why: live customer refresh must not overwrite edited sale contact details.
+- Dashboard display breakdowns use browser-safe Shared helpers without changing saved amounts; header artwork is packaged in public/app for offline Android use. Why: web and native displays must stay identical and preserve billing logic.
