@@ -639,7 +639,7 @@ html,body{max-width:100%;overflow-x:clip;overscroll-behavior-x:none}#shell,.fnav
 @media(max-width:360px){.dashboard-main .stat .num{font-size:14px!important}.dashboard-main .stat .sub span{font-size:9.5px!important}}
 
 /* v55: darker cards, wave pattern corners, coloured line text. */
-.dashboard-main .stat{background:
+.dashboard-home .dashboard-main .stat:nth-child(n){background:
  radial-gradient(140% 70% at 110% -10%,color-mix(in srgb,var(--ib) 45%,transparent) 0 30%,transparent 31%),
  radial-gradient(150% 80% at 115% -15%,color-mix(in srgb,var(--ib) 22%,transparent) 0 38%,transparent 39%),
  radial-gradient(120% 60% at -15% 115%,color-mix(in srgb,var(--ib) 30%,transparent) 0 28%,transparent 29%),
