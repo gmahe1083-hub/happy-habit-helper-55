@@ -493,3 +493,4 @@ html,body{max-width:100%;overflow-x:clip;overscroll-behavior-x:none}#shell,.fnav
 .monthbar .mb-m{color:#7a4a00;font-weight:900;letter-spacing:.3px}.monthbar .mb-r{color:#047857;font-weight:900}.monthbar .mb-d{color:#be123c;font-weight:900}
 .monthbar.mb2{background:linear-gradient(135deg,#e3f0ff,#c9e1ff);border-color:#93c0f5}.monthbar.mb2 .mb-m{color:#0b3d91}.monthbar.mb2 .mb-r{color:#1d4ed8}.monthbar.mb2 .mb-d{color:#7c3aed}
 .monthbar.mb3{background:linear-gradient(135deg,#e0f7ec,#bfeed6);border-color:#86d9b0}.monthbar.mb3 .mb-m{color:#065f46}.monthbar.mb3 .mb-r{color:#0b3d91;font-size:16px}.monthbar.mb3 .mb-d{color:#475569;font-weight:700}
+.gn-head .gn-addbtn{margin-left:auto}
