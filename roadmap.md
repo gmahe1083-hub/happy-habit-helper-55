@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Enable notes in sold-device editing and verify saved details refresh and persist
+- [x] Enable notes in sold-device editing; verified saved notes, contact details and prices refresh immediately and survive reopening
 
 - [x] Merge v33-2, preserving Settings & Backup, cloud backup/restore, automatic shared updates, smooth transitions, and full uncropped logos; verified monthly summaries, return to sale, persistence and isolated two-device sharing
 
