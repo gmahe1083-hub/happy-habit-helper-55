@@ -684,3 +684,16 @@ html,body{max-width:100%;overflow-x:clip;overscroll-behavior-x:none}#shell,.fnav
 .gn-item:nth-child(6n+4){background:var(--rx-violet);border-color:var(--rx-violet-b,#ded5ff);border-left-color:var(--dash-violet)}
 .gn-item:nth-child(6n+5){background:#ffe8ee;border-color:#f5a9bd;border-left-color:var(--dash-rose)}
 .gn-item:nth-child(6n){background:#eef6df;border-color:#c2dc8e;border-left-color:#4d7a0b}
+
+/* v57: no repeated colours — unique colour per dashboard section title and device type card. */
+.dashboard-home .section-title:nth-of-type(1){color:#0f766e!important}
+.dashboard-home .section-title:nth-of-type(1)::after{background:linear-gradient(90deg,#5ec4b6,transparent)}
+.dashboard-home .section-title:nth-of-type(2){color:#6d28d9!important}
+.dashboard-home .section-title:nth-of-type(2)::after{background:linear-gradient(90deg,#b79bf0,transparent)}
+.dashboard-home .section-title:nth-of-type(3){color:#b4234f!important}
+.dashboard-home .section-title:nth-of-type(3)::after{background:linear-gradient(90deg,#f0a3bc,transparent)}
+.dashboard-home .section-title.gn-head{color:#a16207!important}
+.dashboard-home .section-title.gn-head::after{background:linear-gradient(90deg,#ecc96f,transparent)}
+.dashboard-home .type-card:nth-child(1){background:linear-gradient(160deg,#e6f0ff,#cfe0fb)!important;border:1px solid #a9c4ee}
+.dashboard-home .type-card:nth-child(2){background:linear-gradient(160deg,#eafaf1,#d2f1e0)!important;border:1px solid #a3dfc0}
+.dashboard-home .type-card:nth-child(3){background:linear-gradient(160deg,#fdf1e7,#fbe3cd)!important;border:1px solid #f0c9a2}
