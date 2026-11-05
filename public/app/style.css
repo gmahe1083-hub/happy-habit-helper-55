@@ -710,3 +710,50 @@ html,body{max-width:100%;overflow-x:clip;overscroll-behavior-x:none}#shell,.fnav
 .dashboard-home .dashboard-main .stat:nth-child(6) .sub span:nth-child(odd){color:#9a3412!important}
 .dashboard-home .dashboard-main .stat:nth-child(6) .sub span:nth-child(even){color:#1d4ed8!important}
 .dashboard-home .dashboard-main .stat:nth-child(7) .sub span:nth-child(3){color:#15803d!important}
+
+/* v59: Lovable-57 pastel palette — 8 unique cards, darker-shade inner boxes, new month lines. */
+.dashboard-home .dashboard-main .stat:nth-child(1){--bg:#D9F3E8;--ib:#16866B;--t:#0f5e4b;--v:#0f5e4b;--l:#16866B;background:linear-gradient(150deg,#ffffff99 0%,#D9F3E8 38%,#C7E9DA 100%)!important;border:1px solid color-mix(in srgb,#16866B 28%,transparent)!important;box-shadow:0 4px 14px color-mix(in srgb,#16866B 14%,transparent)!important}
+.dashboard-home .dashboard-main .stat:nth-child(1) .num{color:#0f5e4b!important}.dashboard-home .dashboard-main .stat:nth-child(1) .label{color:#16866B!important}
+.dashboard-home .dashboard-main .stat:nth-child(1) .sub,.dashboard-home .dashboard-main .stat:nth-child(1) .sub span{background:linear-gradient(160deg,#C7E9DA,color-mix(in srgb,#C7E9DA 85%,#16866B))!important;border-color:color-mix(in srgb,#16866B 35%,transparent)!important}
+.dashboard-home .dashboard-main .stat:nth-child(1) .sub{box-shadow:0 1px 4px color-mix(in srgb,#16866B 16%,transparent)!important}
+.dashboard-home .dashboard-main .stat:nth-child(1) .sub span,.dashboard-home .dashboard-main .stat:nth-child(1) .sub span:nth-child(n){color:#0f5e4b!important}
+.dashboard-home .dashboard-main .stat:nth-child(2){--bg:#EAE0FF;--ib:#7950C8;--t:#523090;--v:#523090;--l:#7950C8;background:linear-gradient(150deg,#ffffff99 0%,#EAE0FF 38%,#DDD0FA 100%)!important;border:1px solid color-mix(in srgb,#7950C8 28%,transparent)!important;box-shadow:0 4px 14px color-mix(in srgb,#7950C8 14%,transparent)!important}
+.dashboard-home .dashboard-main .stat:nth-child(2) .num{color:#523090!important}.dashboard-home .dashboard-main .stat:nth-child(2) .label{color:#7950C8!important}
+.dashboard-home .dashboard-main .stat:nth-child(2) .sub,.dashboard-home .dashboard-main .stat:nth-child(2) .sub span{background:linear-gradient(160deg,#DDD0FA,color-mix(in srgb,#DDD0FA 85%,#7950C8))!important;border-color:color-mix(in srgb,#7950C8 35%,transparent)!important}
+.dashboard-home .dashboard-main .stat:nth-child(2) .sub{box-shadow:0 1px 4px color-mix(in srgb,#7950C8 16%,transparent)!important}
+.dashboard-home .dashboard-main .stat:nth-child(2) .sub span,.dashboard-home .dashboard-main .stat:nth-child(2) .sub span:nth-child(n){color:#523090!important}
+.dashboard-home .dashboard-main .stat:nth-child(3){--bg:#DCEBFF;--ib:#2867B2;--t:#1b4a82;--v:#1b4a82;--l:#2867B2;background:linear-gradient(150deg,#ffffff99 0%,#DCEBFF 38%,#CADFF8 100%)!important;border:1px solid color-mix(in srgb,#2867B2 28%,transparent)!important;box-shadow:0 4px 14px color-mix(in srgb,#2867B2 14%,transparent)!important}
+.dashboard-home .dashboard-main .stat:nth-child(3) .num{color:#1b4a82!important}.dashboard-home .dashboard-main .stat:nth-child(3) .label{color:#2867B2!important}
+.dashboard-home .dashboard-main .stat:nth-child(3) .sub,.dashboard-home .dashboard-main .stat:nth-child(3) .sub span{background:linear-gradient(160deg,#CADFF8,color-mix(in srgb,#CADFF8 85%,#2867B2))!important;border-color:color-mix(in srgb,#2867B2 35%,transparent)!important}
+.dashboard-home .dashboard-main .stat:nth-child(3) .sub{box-shadow:0 1px 4px color-mix(in srgb,#2867B2 16%,transparent)!important}
+.dashboard-home .dashboard-main .stat:nth-child(3) .sub span,.dashboard-home .dashboard-main .stat:nth-child(3) .sub span:nth-child(n){color:#1b4a82!important}
+.dashboard-home .dashboard-main .stat:nth-child(4){--bg:#FFE8D6;--ib:#D47725;--t:#8f4a10;--v:#8f4a10;--l:#D47725;background:linear-gradient(150deg,#ffffff99 0%,#FFE8D6 38%,#FFE0B9 100%)!important;border:1px solid color-mix(in srgb,#D47725 28%,transparent)!important;box-shadow:0 4px 14px color-mix(in srgb,#D47725 14%,transparent)!important}
+.dashboard-home .dashboard-main .stat:nth-child(4) .num{color:#8f4a10!important}.dashboard-home .dashboard-main .stat:nth-child(4) .label{color:#D47725!important}
+.dashboard-home .dashboard-main .stat:nth-child(4) .sub,.dashboard-home .dashboard-main .stat:nth-child(4) .sub span{background:linear-gradient(160deg,#FFE0B9,color-mix(in srgb,#FFE0B9 85%,#D47725))!important;border-color:color-mix(in srgb,#D47725 35%,transparent)!important}
+.dashboard-home .dashboard-main .stat:nth-child(4) .sub{box-shadow:0 1px 4px color-mix(in srgb,#D47725 16%,transparent)!important}
+.dashboard-home .dashboard-main .stat:nth-child(4) .sub span,.dashboard-home .dashboard-main .stat:nth-child(4) .sub span:nth-child(n){color:#8f4a10!important}
+.dashboard-home .dashboard-main .stat:nth-child(5){--bg:#D7F2F5;--ib:#138C9B;--t:#0c5f69;--v:#0c5f69;--l:#138C9B;background:linear-gradient(150deg,#ffffff99 0%,#D7F2F5 38%,#BFE7EA 100%)!important;border:1px solid color-mix(in srgb,#138C9B 28%,transparent)!important;box-shadow:0 4px 14px color-mix(in srgb,#138C9B 14%,transparent)!important}
+.dashboard-home .dashboard-main .stat:nth-child(5) .num{color:#0c5f69!important}.dashboard-home .dashboard-main .stat:nth-child(5) .label{color:#138C9B!important}
+.dashboard-home .dashboard-main .stat:nth-child(5) .sub,.dashboard-home .dashboard-main .stat:nth-child(5) .sub span{background:linear-gradient(160deg,#BFE7EA,color-mix(in srgb,#BFE7EA 85%,#138C9B))!important;border-color:color-mix(in srgb,#138C9B 35%,transparent)!important}
+.dashboard-home .dashboard-main .stat:nth-child(5) .sub{box-shadow:0 1px 4px color-mix(in srgb,#138C9B 16%,transparent)!important}
+.dashboard-home .dashboard-main .stat:nth-child(5) .sub span,.dashboard-home .dashboard-main .stat:nth-child(5) .sub span:nth-child(n){color:#0c5f69!important}
+.dashboard-home .dashboard-main .stat:nth-child(6){--bg:#FFE0E4;--ib:#C84965;--t:#8c2840;--v:#8c2840;--l:#C84965;background:linear-gradient(150deg,#ffffff99 0%,#FFE0E4 38%,#F9C9D2 100%)!important;border:1px solid color-mix(in srgb,#C84965 28%,transparent)!important;box-shadow:0 4px 14px color-mix(in srgb,#C84965 14%,transparent)!important}
+.dashboard-home .dashboard-main .stat:nth-child(6) .num{color:#8c2840!important}.dashboard-home .dashboard-main .stat:nth-child(6) .label{color:#C84965!important}
+.dashboard-home .dashboard-main .stat:nth-child(6) .sub,.dashboard-home .dashboard-main .stat:nth-child(6) .sub span{background:linear-gradient(160deg,#F9C9D2,color-mix(in srgb,#F9C9D2 85%,#C84965))!important;border-color:color-mix(in srgb,#C84965 35%,transparent)!important}
+.dashboard-home .dashboard-main .stat:nth-child(6) .sub{box-shadow:0 1px 4px color-mix(in srgb,#C84965 16%,transparent)!important}
+.dashboard-home .dashboard-main .stat:nth-child(6) .sub span,.dashboard-home .dashboard-main .stat:nth-child(6) .sub span:nth-child(n){color:#8c2840!important}
+.dashboard-home .dashboard-main .stat:nth-child(7){--bg:#F2DFFF;--ib:#A044AD;--t:#6e2a78;--v:#6e2a78;--l:#A044AD;background:linear-gradient(150deg,#ffffff99 0%,#F2DFFF 38%,#E8C7F0 100%)!important;border:1px solid color-mix(in srgb,#A044AD 28%,transparent)!important;box-shadow:0 4px 14px color-mix(in srgb,#A044AD 14%,transparent)!important}
+.dashboard-home .dashboard-main .stat:nth-child(7) .num{color:#6e2a78!important}.dashboard-home .dashboard-main .stat:nth-child(7) .label{color:#A044AD!important}
+.dashboard-home .dashboard-main .stat:nth-child(7) .sub,.dashboard-home .dashboard-main .stat:nth-child(7) .sub span{background:linear-gradient(160deg,#E8C7F0,color-mix(in srgb,#E8C7F0 85%,#A044AD))!important;border-color:color-mix(in srgb,#A044AD 35%,transparent)!important}
+.dashboard-home .dashboard-main .stat:nth-child(7) .sub{box-shadow:0 1px 4px color-mix(in srgb,#A044AD 16%,transparent)!important}
+.dashboard-home .dashboard-main .stat:nth-child(7) .sub span,.dashboard-home .dashboard-main .stat:nth-child(7) .sub span:nth-child(n){color:#6e2a78!important}
+.dashboard-home .dashboard-main .stat:nth-child(8){--bg:#FFF2C9;--ib:#AD831B;--t:#74560e;--v:#74560e;--l:#AD831B;background:linear-gradient(150deg,#ffffff99 0%,#FFF2C9 38%,#F9E7A9 100%)!important;border:1px solid color-mix(in srgb,#AD831B 28%,transparent)!important;box-shadow:0 4px 14px color-mix(in srgb,#AD831B 14%,transparent)!important}
+.dashboard-home .dashboard-main .stat:nth-child(8) .num{color:#74560e!important}.dashboard-home .dashboard-main .stat:nth-child(8) .label{color:#AD831B!important}
+.dashboard-home .dashboard-main .stat:nth-child(8) .sub,.dashboard-home .dashboard-main .stat:nth-child(8) .sub span{background:linear-gradient(160deg,#F9E7A9,color-mix(in srgb,#F9E7A9 85%,#AD831B))!important;border-color:color-mix(in srgb,#AD831B 35%,transparent)!important}
+.dashboard-home .dashboard-main .stat:nth-child(8) .sub{box-shadow:0 1px 4px color-mix(in srgb,#AD831B 16%,transparent)!important}
+.dashboard-home .dashboard-main .stat:nth-child(8) .sub span,.dashboard-home .dashboard-main .stat:nth-child(8) .sub span:nth-child(n){color:#74560e!important}
+.dashboard-home .monthbar.mb1{background:linear-gradient(90deg,#FFF0D9,#fff8ec 50%,#ffe9c8)!important;border:1px solid #efd3a6!important}
+.dashboard-home .monthbar.mb1 span{color:#8a5a12!important;border-color:#e9cc9a!important}
+.dashboard-home .monthbar.mb2{background:linear-gradient(90deg,#E6E9FF,#f3f4ff 50%,#dde1fb)!important;border:1px solid #c5cbf3!important}
+.dashboard-home .monthbar.mb2 span{color:#3f4aa0!important;border-color:#c5cbf3!important}
+body::before{opacity:.45!important}
