@@ -523,3 +523,22 @@ html,body{max-width:100%;overflow-x:clip;overscroll-behavior-x:none}#shell,.fnav
 .dashboard-home .gn-head::after{display:none}
 .dashboard-home .gn-head>span{flex:1}
 @media(max-width:420px){.dashboard-main .stat .num{font-size:23px}}
+
+/* Unique per-card dashboard colours: background, title, value, lines, visible icon badge. */
+.dashboard-main .stat{--bg:#e6f4ff;--bd:#9cc9f5;--t:#0b4fa8;--v:#063a80;--l:#2f5f99;--ib:#1d6fd8}
+.dashboard-main .stat:nth-child(1){--bg:#e3f8ef;--bd:#8fd8b5;--t:#0b7a55;--v:#05553b;--l:#2e7d62;--ib:#12a271}
+.dashboard-main .stat:nth-child(2){--bg:#efe8ff;--bd:#c2adf2;--t:#6b2fc4;--v:#4c1d95;--l:#7a52b8;--ib:#8b5cf6}
+.dashboard-main .stat:nth-child(3){--bg:#e5f1ff;--bd:#9cc4f2;--t:#1559b8;--v:#0b3d91;--l:#3b6cb0;--ib:#2f7be6}
+.dashboard-main .stat:nth-child(4){--bg:#fff3df;--bd:#f2c98a;--t:#a35f00;--v:#7a4500;--l:#9a6a28;--ib:#f59e0b}
+.dashboard-main .stat:nth-child(5){--bg:#e2f7f8;--bd:#8fd6dc;--t:#0a7a86;--v:#065a63;--l:#2f7f88;--ib:#0ea5b7}
+.dashboard-main .stat:nth-child(6){--bg:#ffe8ee;--bd:#f5a9bd;--t:#b4234f;--v:#881337;--l:#a3456a;--ib:#e11d48}
+.dashboard-main .stat:nth-child(7){--bg:#fdeaf7;--bd:#efaedb;--t:#a8237f;--v:#7e1761;--l:#a04b88;--ib:#db2777}
+.dashboard-main .stat:nth-child(8){--bg:#eef6df;--bd:#c2dc8e;--t:#4d7a0b;--v:#365a05;--l:#5f7f2e;--ib:#65a30d}
+.dashboard-main .stat:nth-child(9){--bg:#ffece2;--bd:#f6b893;--t:#b2470d;--v:#86330a;--l:#a35a33;--ib:#ea580c}
+.dashboard-main .stat:nth-child(10){--bg:#e8ecff;--bd:#aab6f3;--t:#3442b8;--v:#232f8f;--l:#4f5aa8;--ib:#4f46e5}
+.dashboard-main .stat{background:var(--bg)!important;border:1px solid var(--bd)!important}
+.dashboard-main .stat .label{color:var(--t)!important}
+.dashboard-main .stat .num{color:var(--v)!important}
+.dashboard-main .stat .sub,.dashboard-main .stat .sub span{color:var(--l)!important;font-weight:700}
+.dashboard-main .stat::before{position:static!important;opacity:1!important;filter:none!important;background:var(--ib)!important;box-shadow:0 4px 10px color-mix(in srgb,var(--ib) 35%,transparent)!important;width:42px;height:42px;border-radius:50%;margin:0 auto 8px!important;font-size:21px;display:flex!important}
+.dashboard-main .stat > img,.dashboard-main .stat svg{opacity:1!important}
