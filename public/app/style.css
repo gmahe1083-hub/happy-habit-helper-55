@@ -637,3 +637,20 @@ html,body{max-width:100%;overflow-x:clip;overscroll-behavior-x:none}#shell,.fnav
  .dashboard-home .quick button{font-size:10.5px!important;gap:5px;padding:10px 6px!important}
 }
 @media(max-width:360px){.dashboard-main .stat .num{font-size:14px!important}.dashboard-main .stat .sub span{font-size:9.5px!important}}
+
+/* v55: darker cards, wave pattern corners, coloured line text. */
+.dashboard-home .dashboard-main .stat:nth-child(n){background:
+ radial-gradient(140% 70% at 110% -10%,color-mix(in srgb,var(--ib) 45%,transparent) 0 30%,transparent 31%),
+ radial-gradient(150% 80% at 115% -15%,color-mix(in srgb,var(--ib) 22%,transparent) 0 38%,transparent 39%),
+ radial-gradient(120% 60% at -15% 115%,color-mix(in srgb,var(--ib) 30%,transparent) 0 28%,transparent 29%),
+ linear-gradient(160deg,color-mix(in srgb,var(--ib) 10%,#fff),color-mix(in srgb,var(--ib) 26%,#fff))!important;
+ border:1px solid color-mix(in srgb,var(--ib) 45%,#fff)!important;box-shadow:0 8px 16px -10px color-mix(in srgb,var(--ib) 70%,transparent)!important}
+.dashboard-main .stat .sub{background:color-mix(in srgb,var(--ib) 20%,#fff)!important;border-color:color-mix(in srgb,var(--ib) 40%,#fff)!important}
+.dashboard-main .stat .sub span{font-weight:700!important}
+.dashboard-main .stat .sub span:nth-child(4n+1){color:color-mix(in srgb,var(--ib) 80%,#000)!important}
+.dashboard-main .stat .sub span:nth-child(4n+2){color:#1d4ed8!important}
+.dashboard-main .stat .sub span:nth-child(4n+3){color:#b45309!important}
+.dashboard-main .stat .sub span:nth-child(4n+4){color:#be123c!important}
+.dashboard-home .type-card{background:linear-gradient(160deg,#e6f0ff,#cfe0fb)!important;border:1px solid #a9c4ee}
+.dashboard-home .quick button{filter:saturate(1.15) brightness(.9)}
+.dashboard-home .monthbar{filter:saturate(1.2) brightness(.97)}
