@@ -794,3 +794,7 @@ body::before{opacity:.45!important}
 .dashboard-home .dashboard-main .stat:nth-child(8) .sub span:nth-child(3){color:#9f1239!important}
 .dashboard-home .dashboard-main .stat:nth-child(8) .sub span:nth-child(4){color:#4338ca!important}
 .dashboard-home .dashboard-main .stat .sub{gap:3px!important;padding:4px!important}.dashboard-home .dashboard-main .stat .sub span{font-size:10.5px!important;padding:3px 4px!important;letter-spacing:-.1px}
+
+/* v61: max two details per line; long ones drop to own line; soft shadow per detail. */
+.dashboard-home .dashboard-main .stat .sub span{flex:1 1 40%!important;max-width:100%;box-shadow:0 1px 3px rgba(15,40,80,.18),0 1px 1px rgba(15,40,80,.08)!important;background:rgba(255,255,255,.55)!important}
+.dashboard-home .dashboard-main .stat .sub span{min-width:max-content!important;overflow:visible!important}
