@@ -577,3 +577,34 @@ html,body{max-width:100%;overflow-x:clip;overscroll-behavior-x:none}#shell,.fnav
 .dashboard-home .quick button:nth-child(3){background:linear-gradient(135deg,#8b5cf6,#6d28d9)!important}
 .dashboard-home .alert.warning{background:linear-gradient(90deg,#fff6d8,#fffbee)!important;border-left:5px solid #f5b400!important;border-radius:14px!important}
 @media(max-width:400px){.dashboard-home .monthbar{font-size:12.5px;padding:9px 10px!important}.dashboard-main .stat .num{font-size:20px!important}.dashboard-main .stat::before{width:38px!important;height:38px!important;font-size:20px!important}}
+
+/* v53: match reference image — pastel month pills, teal earnings bar, aligned card line boxes. */
+.dashboard-home .monthbar{background:linear-gradient(90deg,#fff3d6,#fffaf0 50%,#ffe9dc)!important;border-color:#f3dcae!important}
+.dashboard-home .monthbar.mb2{background:linear-gradient(90deg,#eceaff,#f7f6ff 50%,#ece4ff)!important;border-color:#d6d0f5!important}
+.dashboard-home .monthbar .mb-m{flex:0 0 auto;padding-right:12px;font-weight:900}
+.dashboard-home .monthbar.mb3{background:linear-gradient(135deg,#0c5c68,#0f7480 55%,#0c5c68)!important;align-items:center}
+.dashboard-home .monthbar.mb3 .mb-r{flex:0 0 auto;background:linear-gradient(180deg,#fff7df,#ffe9b5);color:#0b3a45!important;border-radius:999px;padding:4px 14px;border-left:0!important;margin:0 auto;font-size:20px!important}
+.dashboard-home .monthbar.mb3 .mb-m{border-right:1.5px solid rgba(255,255,255,.35)}
+.dashboard-main{align-items:stretch}
+.dashboard-main .stat{grid-template-rows:auto auto 1fr;align-content:start;align-items:start!important;min-width:0}
+.dashboard-main .stat::before{align-self:center}
+.dashboard-main .stat .num,.dashboard-main .stat .label{min-width:0;overflow-wrap:anywhere}
+.dashboard-main .stat .num{align-self:end;padding-left:10px;border-left:1.5px solid color-mix(in srgb,var(--ib) 35%,transparent)}
+.dashboard-main .stat .label{align-self:start;padding-left:10px;border-left:1.5px solid color-mix(in srgb,var(--ib) 35%,transparent);line-height:1.2}
+.dashboard-main .stat .sub{align-self:end;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px 0;width:100%;box-sizing:border-box}
+.dashboard-main .stat .sub span{margin:0!important;padding:1px 4px;text-align:center;white-space:normal;line-height:1.25;font-size:12px;min-width:0;overflow-wrap:anywhere}
+.dashboard-main .stat .sub span:nth-child(even){border-left:1.5px solid #c9d6ea}
+.dashboard-main .stat .sub span:last-child:nth-child(odd){grid-column:1/-1}
+.dashboard-main .stat:nth-child(3) .sub span:nth-child(n+3){grid-column:1/-1;border-left:0}
+.dashboard-main .stat:nth-child(5) .sub,.dashboard-main .stat:nth-child(7) .sub,.dashboard-main .stat:nth-child(8) .sub{grid-template-columns:1fr}
+.dashboard-main .stat:nth-child(5) .sub span,.dashboard-main .stat:nth-child(7) .sub span,.dashboard-main .stat:nth-child(8) .sub span{border-left:0}
+.dashboard-home .quick button{display:flex!important;flex-direction:row!important;align-items:center;justify-content:center;gap:8px;text-align:left}
+@media(max-width:400px){.dashboard-main .stat .sub span{font-size:11px}}
+.dashboard-main .stat .sub span{white-space:nowrap}
+.dashboard-main .stat:nth-child(3) .sub,.dashboard-main .stat:nth-child(4) .sub{grid-template-columns:1fr}
+.dashboard-main .stat:nth-child(3) .sub span,.dashboard-main .stat:nth-child(4) .sub span{border-left:0}
+.dashboard-home .monthbar.mb3{padding:12px 10px!important;gap:6px}
+.dashboard-home .monthbar.mb3 .mb-m{font-size:13.5px;padding-right:8px}
+.dashboard-home .monthbar.mb3 .mb-r{font-size:17px!important;padding:3px 10px}
+.dashboard-home .monthbar.mb3 .mb-d{margin-left:0;font-size:11px;padding:3px 8px}
+.dashboard-main .stat .sub span{white-space:normal}
