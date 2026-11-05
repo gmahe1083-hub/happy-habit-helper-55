@@ -613,3 +613,27 @@ html,body{max-width:100%;overflow-x:clip;overscroll-behavior-x:none}#shell,.fnav
 .dashboard-home .monthbar.mb3 .mb-m{font-size:12.5px!important}
 .dashboard-home .monthbar.mb3 .mb-r{font-size:14px!important;padding:2px 10px}
 .dashboard-home .monthbar.mb3 .mb-d{font-size:10.5px!important;padding:2px 7px}
+
+/* v54: mobile-friendly dashboard, tinted line boxes, image-like card backgrounds. */
+.dashboard-main .stat{position:relative;overflow:hidden;background:radial-gradient(120% 60% at 100% 0%,color-mix(in srgb,var(--ib) 22%,transparent),transparent 60%),radial-gradient(90% 50% at 0% 100%,color-mix(in srgb,var(--ib) 18%,transparent),transparent 65%),linear-gradient(160deg,#fff,var(--bg) 75%)!important}
+.dashboard-main .stat .sub{background:color-mix(in srgb,var(--ib) 12%,#fff)!important;border:1px solid color-mix(in srgb,var(--ib) 25%,#fff)!important}
+.dashboard-main .stat .sub span{color:color-mix(in srgb,var(--ib) 55%,#1e293b)!important}
+.dashboard-main .stat .sub span:nth-child(even){border-left-color:color-mix(in srgb,var(--ib) 35%,#fff)}
+@media(max-width:480px){
+ .dashboard-main{gap:8px!important}
+ .dashboard-main .stat{padding:10px 8px 8px!important;column-gap:7px;border-radius:14px!important}
+ .dashboard-main .stat::before{width:32px!important;height:32px!important;font-size:17px!important;border-radius:10px!important}
+ .dashboard-main .stat .num{font-size:16px!important;padding-left:7px}
+ .dashboard-main .stat .label{font-size:11px!important;padding-left:7px}
+ .dashboard-main .stat .sub{margin-top:7px;padding:4px 5px!important;border-radius:9px}
+ .dashboard-main .stat .sub span{font-size:10px!important;padding:1px 2px;line-height:1.3}
+ .dashboard-home .monthbar{font-size:11.5px!important;padding:7px 10px!important}
+ .dashboard-home .monthbar .mb-m{padding-right:8px}
+ .dashboard-home .monthbar.mb3 .mb-m{font-size:11.5px!important}
+ .dashboard-home .monthbar.mb3 .mb-r{font-size:13px!important}
+ .dashboard-home .section-title{font-size:17px!important}
+ .dashboard-home .type-card b{font-size:13px}
+ .dashboard-home .type-card .tcl{font-size:10.5px}
+ .dashboard-home .quick button{font-size:10.5px!important;gap:5px;padding:10px 6px!important}
+}
+@media(max-width:360px){.dashboard-main .stat .num{font-size:14px!important}.dashboard-main .stat .sub span{font-size:9.5px!important}}
