@@ -697,3 +697,16 @@ html,body{max-width:100%;overflow-x:clip;overscroll-behavior-x:none}#shell,.fnav
 .dashboard-home .type-card:nth-child(1){background:linear-gradient(160deg,#e6f0ff,#cfe0fb)!important;border:1px solid #a9c4ee}
 .dashboard-home .type-card:nth-child(2){background:linear-gradient(160deg,#eafaf1,#d2f1e0)!important;border:1px solid #a3dfc0}
 .dashboard-home .type-card:nth-child(3){background:linear-gradient(160deg,#fdf1e7,#fbe3cd)!important;border:1px solid #f0c9a2}
+
+/* v58: Rental Due (card 8) own colour; unique small-line colours per card. */
+.dashboard-main .stat:nth-child(8){--ib:#0d9488;--bg:#e0f7f4;--t:#115e59;--v:#0f766e}
+.dashboard-main .stat:nth-child(8) .num,.dashboard-main .stat:nth-child(8) .label{color:#115e59!important}
+.dashboard-home .dashboard-main .stat:nth-child(1) .sub span:nth-child(3){color:#7c2d12!important}
+.dashboard-home .dashboard-main .stat:nth-child(1) .sub span:nth-child(4){color:#4338ca!important}
+.dashboard-home .dashboard-main .stat:nth-child(2) .sub span:nth-child(3){color:#9f1239!important}
+.dashboard-home .dashboard-main .stat:nth-child(3) .sub span:nth-child(3){color:#be123c!important}
+.dashboard-home .dashboard-main .stat:nth-child(3) .sub span:nth-child(4){color:#047857!important}
+.dashboard-home .dashboard-main .stat:nth-child(4) .sub span:nth-child(3){color:#1e40af!important}
+.dashboard-home .dashboard-main .stat:nth-child(6) .sub span:nth-child(odd){color:#9a3412!important}
+.dashboard-home .dashboard-main .stat:nth-child(6) .sub span:nth-child(even){color:#1d4ed8!important}
+.dashboard-home .dashboard-main .stat:nth-child(7) .sub span:nth-child(3){color:#15803d!important}
