@@ -600,3 +600,10 @@ html,body{max-width:100%;overflow-x:clip;overscroll-behavior-x:none}#shell,.fnav
 .dashboard-main .stat:nth-child(5) .sub span,.dashboard-main .stat:nth-child(7) .sub span,.dashboard-main .stat:nth-child(8) .sub span{border-left:0}
 .dashboard-home .quick button{display:flex!important;flex-direction:row!important;align-items:center;justify-content:center;gap:8px;text-align:left}
 @media(max-width:400px){.dashboard-main .stat .sub span{font-size:11px}}
+.dashboard-main .stat .sub span{white-space:nowrap}
+.dashboard-main .stat:nth-child(3) .sub,.dashboard-main .stat:nth-child(4) .sub{grid-template-columns:1fr}
+.dashboard-main .stat:nth-child(3) .sub span,.dashboard-main .stat:nth-child(4) .sub span{border-left:0}
+.dashboard-home .monthbar.mb3{padding:12px 10px!important;gap:6px}
+.dashboard-home .monthbar.mb3 .mb-m{font-size:13.5px;padding-right:8px}
+.dashboard-home .monthbar.mb3 .mb-r{font-size:17px!important;padding:3px 10px}
+.dashboard-home .monthbar.mb3 .mb-d{margin-left:0;font-size:11px;padding:3px 8px}
