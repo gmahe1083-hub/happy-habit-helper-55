@@ -542,3 +542,38 @@ html,body{max-width:100%;overflow-x:clip;overscroll-behavior-x:none}#shell,.fnav
 .dashboard-main .stat .sub,.dashboard-main .stat .sub span{color:var(--l)!important;font-weight:700}
 .dashboard-main .stat::before{position:static!important;opacity:1!important;filter:none!important;background:var(--ib)!important;box-shadow:0 4px 10px color-mix(in srgb,var(--ib) 35%,transparent)!important;width:42px;height:42px;border-radius:50%;margin:0 auto 8px!important;font-size:21px;display:flex!important}
 .dashboard-main .stat > img,.dashboard-main .stat svg{opacity:1!important}
+
+/* Reference-image dashboard look: white glass month pills, navy earnings bar, icon-left cards with white inner line boxes. */
+.dashboard-home .monthbar{background:rgba(255,255,255,.92)!important;border:1px solid #dbe6f5!important;border-radius:22px!important;box-shadow:0 6px 16px -8px rgba(30,64,120,.35)!important;padding:10px 16px!important;flex-wrap:nowrap;font-size:14px}
+.dashboard-home .monthbar span{flex:1;text-align:center;white-space:nowrap}
+.dashboard-home .monthbar span+span{border-left:1.5px solid #c9d6ea}
+.dashboard-home .monthbar .mb-m{color:#16233f!important;text-align:left}
+.dashboard-home .monthbar .mb-m::before{content:"📅 "}
+.dashboard-home .monthbar .mb-r{color:#15803d!important}
+.dashboard-home .monthbar .mb-d{color:#e11d48!important}
+.dashboard-home .monthbar.mb2 .mb-r{color:#1d4ed8!important}
+.dashboard-home .monthbar.mb2 .mb-d{color:#6d28d9!important}
+.dashboard-home .monthbar.mb3{background:linear-gradient(135deg,#0b3a75,#0e5aa8 60%,#0b3a75)!important;border:0!important;border-radius:18px!important;padding:14px 16px!important;box-shadow:0 10px 20px -10px rgba(11,58,117,.8)!important}
+.dashboard-home .monthbar.mb3 span+span{border-left-color:rgba(255,255,255,.35)}
+.dashboard-home .monthbar.mb3 .mb-m{color:#fff!important;font-size:15px}
+.dashboard-home .monthbar.mb3 .mb-m::before{content:"🪙 "}
+.dashboard-home .monthbar.mb3 .mb-r{color:#fff!important;font-size:22px!important;font-weight:900}
+.dashboard-home .monthbar.mb3 .mb-d{flex:0 0 auto;background:#fff;color:#0b3a75!important;border-radius:999px;padding:4px 10px;font-size:12px;border-left:0!important;margin-left:8px}
+.dashboard-main .stat{display:grid!important;grid-template-columns:auto 1fr;grid-template-areas:"ic num" "ic lab" "sub sub";column-gap:10px;align-items:center;text-align:left!important;border-radius:18px!important;padding:14px 10px 10px!important;box-shadow:0 8px 18px -12px rgba(30,64,120,.45)!important;background:linear-gradient(160deg,#fff,var(--bg) 70%)!important}
+.dashboard-main .stat::before{grid-area:ic;margin:0!important;width:46px!important;height:46px!important;border-radius:14px!important;font-size:24px!important}
+.dashboard-main .stat .num{grid-area:num;font-size:24px!important;line-height:1.1}
+.dashboard-main .stat .label{grid-area:lab;font-size:13px!important}
+.dashboard-main .stat .sub{grid-area:sub;margin-top:10px;background:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.9);border-radius:12px;padding:6px 8px!important;text-align:center;box-shadow:inset 0 1px 3px rgba(30,64,120,.08)}
+.dashboard-main .stat .sub span{display:inline-block!important;margin:2px 4px!important;color:#1e293b!important;font-weight:600}
+.dashboard-home .section-title{color:#0f2a55!important;display:flex;align-items:center;gap:10px}
+.dashboard-home .section-title::after{content:"";flex:1;height:1.5px;background:linear-gradient(90deg,#9cb8de,transparent)}
+.dashboard-home .gn-head::after{display:block}
+.dashboard-home .gn-head>span{flex:0 0 auto}
+.dashboard-home .gn-addbtn{order:3;background:#1d4ed8!important;color:#fff!important;border-radius:999px!important}
+.dashboard-home .type-card{background:linear-gradient(160deg,#fff,#eef6ff)!important;border-radius:16px!important;box-shadow:0 6px 14px -10px rgba(30,64,120,.5)}
+.dashboard-home .quick button{border-radius:16px!important;box-shadow:0 8px 16px -10px rgba(15,23,42,.6)}
+.dashboard-home .quick button:nth-child(1){background:linear-gradient(135deg,#0f9b6c,#0a7a55)!important}
+.dashboard-home .quick button:nth-child(2){background:linear-gradient(135deg,#2f86f0,#1559c8)!important}
+.dashboard-home .quick button:nth-child(3){background:linear-gradient(135deg,#8b5cf6,#6d28d9)!important}
+.dashboard-home .alert.warning{background:linear-gradient(90deg,#fff6d8,#fffbee)!important;border-left:5px solid #f5b400!important;border-radius:14px!important}
+@media(max-width:400px){.dashboard-home .monthbar{font-size:12.5px;padding:9px 10px!important}.dashboard-main .stat .num{font-size:20px!important}.dashboard-main .stat::before{width:38px!important;height:38px!important;font-size:20px!important}}
