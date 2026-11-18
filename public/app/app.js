@@ -206,7 +206,7 @@ function rcDraw(c,d,kind,draw){
  const W=846,X0=37,X1=812,L=67,R=785,full=kind==='full';
  const rent=Number(d.rent||0),mask=Number(d.mask||0),exp=Number(d.expense||0),paid=rent+mask+(full?exp:0);
  const secs=[];
- const rentalRows=full&&d.notes?[['Check-out notes',d.notes]]:[];
+ const rentalRows=full?[['Check-out notes',d.notes],['Check-in notes',d.checkinNotes]].filter(x=>x[1]):[];
  if(d.sale)secs.push({t:'Sale',i:0,bg:'#feefdc',bd:'#f7ad74',tc:'#d65f0a',lc:'#ec8a22',lb:'#6f4217',h0:82,rows:[['Sale date',rcD(d.start)],['Received',d.receivedType],['Notes',d.notes]].filter(x=>x[1])});else secs.push({t:'Rental',i:0,bg:'#feefdc',bd:'#f7ad74',tc:'#d65f0a',lc:'#ec8a22',lb:'#6f4217',rental:true,rows:rentalRows,h0:255});
  secs.push({t:'Customer',i:1,bg:'#e5f0fd',bd:'#9ccaf6',tc:'#1456c0',lc:'#2a62cc',lb:'#3e66a3',h0:82,rows:(full?[['Name',d.customer.name],['Phone',d.customer.phone],['Address',d.customer.address],['Notes',d.customer.notes]]:[['Name',d.customer.name],['Address',d.customer.address]]).filter(x=>x[1])});
  secs.push({t:'Device',i:2,bg:'#eeebfd',bd:'#b9a2f8',tc:'#5a22c8',lc:'#6a3fd6',lb:'#5d49a8',h0:82,mark:true,rows:[['Name',d.device.name],['Type',d.device.type],['Serial number',d.device.serial]].concat(full?[['Notes',d.device.notes]]:[]).filter(x=>x[1])});
