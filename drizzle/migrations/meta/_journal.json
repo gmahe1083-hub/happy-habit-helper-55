@@ -15,6 +15,13 @@
       "when": 1793137857703,
       "tag": "0001_create_shared_app_updates",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1795024934955,
+      "tag": "0002_restrict_cloud_backup_single_row",
+      "breakpoints": true
     }
   ]
 }
